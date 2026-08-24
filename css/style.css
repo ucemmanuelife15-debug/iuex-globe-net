@@ -14,13 +14,12 @@ html{
 html{
     scroll-behavior:smooth;
 }
-
 body{
     font-family:Arial, Helvetica, sans-serif;
     background:var(--white);
     color:var(--charcoal);
     overflow-x:hidden;
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
 img{
@@ -58,6 +57,91 @@ ul{
 
 }
 
+.account-panel{
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+    z-index: 1100;
+    padding: 24px;
+    transition: right 0.35s ease;
+}
+
+.account-panel.active{
+    right: 0;
+}
+
+.account-panel-header{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.account-close{
+    cursor: pointer;
+    font-size: 20px;
+    color: #5a6b7d;
+}
+
+.account-profile{
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.profile-avatar{
+    width: 70px;
+    height: 70px;
+    background: #f4f7fb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 12px;
+}
+
+.account-profile h3{
+    font-size: 18px;
+    color: #12233d;
+    margin-bottom: 4px;
+}
+
+.account-profile p{
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.account-links{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.account-links a{
+    color: #12233d;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.account-overlay{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 1050;
+}
+
+.account-overlay.active{
+    display: block;
+}
 /* ===========================
    NAVBAR
 =========================== */
@@ -168,12 +252,16 @@ ul{
 .nav-links a.active{
     color: var(--primary-blue);
     font-weight: 700;
-
+}
 .nav-profile{
     display: flex;
     align-items: center;
     gap: 8px;
-}}
+    background: none !important;
+    color: var(--charcoal, #12233d) !important;
+    padding: 0 !important;
+    border: none !important;
+}
 .dashboard-page{
     min-height: 100vh;
     display: flex;
@@ -230,12 +318,15 @@ ul{
     font-size: 18px;
     line-height: 1.0;
 }
-
 .ticker-track{
     display: flex;
     width: 500%;
-    animation: ticker-scroll 36s linear infinite;
+    animation: ticker-scroll 48s linear infinite;
 }
+.dash:nth-child(1)::before{ animation: dash1-fill 48s linear infinite; }
+.dash:nth-child(2)::before{ animation: dash2-fill 48s linear infinite; }
+.dash:nth-child(3)::before{ animation: dash3-fill 48s linear infinite; }
+.dash:nth-child(4)::before{ animation: dash4-fill 48s linear infinite; }
 
 .ticker-item{
     width: 20%;
@@ -248,7 +339,6 @@ ul{
     box-sizing: border-box;
     padding: 0 20px;
     white-space: normal;
-    margin-top: 15px;
 }
 
 .ticker-icon{
@@ -1681,4 +1771,137 @@ ul{
     align-items:center;
     justify-content:center;
     font-size:1.1rem;
+}
+.catalog-page{
+    min-height: 100vh;
+    background: #f4f7fb;
+    padding: 60px 20px;
+}
+
+.catalog-header{
+    max-width: 800px;
+    margin: 0 auto 50px;
+    text-align: center;
+}
+
+.catalog-header .back-link{
+    display: block;
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+.catalog-header h1{
+    font-size: 2.2rem;
+    color: var(--primary-blue);
+    margin: 16px 0;
+}
+
+.catalog-subtext{
+    color: #5a6b7d;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.catalog-empty{
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,30,80,0.08);
+}
+
+.catalog-empty-icon{
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.catalog-empty h2{
+    font-size: 1.4rem;
+    color: #12233d;
+    margin-bottom: 14px;
+}
+
+.catalog-empty p{
+    color: #5a6b7d;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 28px;
+}/* ===== COURSE CARDS ===== */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.course-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--charcoal, #222);
+}
+
+.course-category {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-color, #0b3d91);
+  background: rgba(11, 61, 145, 0.08);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.course-description {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.course-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.course-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #b8860b;
+  background: #fff8e1;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.course-duration {
+  font-size: 13px;
+  color: #777;
+}
+
+.course-level {
+  display: inline-block;
+  font-size: 12px;
+  color: #fff;
+  background: var(--primary-color, #0b3d91);
+  padding: 4px 10px;
+  border-radius: 6px;
 }

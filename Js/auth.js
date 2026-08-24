@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===== SIGN UP LOGIC =====
+ // ===== SIGN UP LOGIC =====
   const signupForm = document.querySelector(".auth-form");
 
   if (signupForm) {
-    signupForm.addEventListener("submit", (e) => {
+    signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const fullname = document.getElementById("fullname").value.trim();
@@ -22,62 +22,72 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const userData = {
-        fullname: fullname,
-        email: email,
-        password: password
-      };
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fullname, email, password }),
+        });
 
-      localStorage.setItem("userAccount", JSON.stringify(userData));
+        const data = await response.json();
 
-      alert("Account created successfully! Please sign in to continue.");
-      window.location.href = "signin.html";
+        if (response.ok) {
+          window.location.href = "signin.html";
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        alert("Something went wrong. Please try again.");
+      }
     });
   }
-
-  // ===== SIGN IN LOGIC =====
+ // ===== SIGN IN LOGIC =====
   const signinForm = document.querySelector(".signin-form");
 
   if (signinForm) {
-    signinForm.addEventListener("submit", (e) => {
+    signinForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/signin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
 
-      if (!savedAccount) {
-        alert("No account found. Please sign up first.");
-        return;
-      }
+        const data = await response.json();
 
-      if (email === savedAccount.email && password === savedAccount.password) {
-        localStorage.setItem("isLoggedIn", "true");
-        alert("Welcome back! Redirecting you to the homepage...");
-        window.location.href = "index.html";
-      } else {
-        alert("Incorrect email or password. Please try again.");
+        if (response.ok) {
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("userAccount", JSON.stringify({ fullname: data.fullname, email }));
+          window.location.href = "index.html";
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        alert("Something went wrong. Please try again.");
       }
     });
-    // ===== DASHBOARD LOGIC =====
+  }
+  // ===== DASHBOARD LOGIC =====
   const welcomeMessage = document.getElementById("welcomeMessage");
   const signOutBtn = document.getElementById("signOutBtn");
 
   if (welcomeMessage) {
     const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
     if (savedAccount) {
-      welcomeMessage.textContent = `Welcome, ${savedAccount.fullname}!`;
+      const firstName = savedAccount.fullname.split(" ")[0];
+      welcomeMessage.textContent = `Welcome, ${firstName}!`;
     }
   }
-
   if (signOutBtn) {
     signOutBtn.addEventListener("click", () => {
       localStorage.removeItem("isLoggedIn");
-      alert("You have been signed out.");
       window.location.href = "index.html";
     });
-  }
   }
   // ===== GOOGLE BUTTON PLACEHOLDER =====
   const googleButtons = document.querySelectorAll(".google-btn");

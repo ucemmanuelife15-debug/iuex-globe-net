@@ -80,6 +80,29 @@
 
 </header>
 <!-- ===========================
+     ACCOUNT PANEL
+=========================== -->
+
+<div class="account-panel" id="accountPanel">
+    <div class="account-panel-header">
+        <span class="account-close" id="accountClose">✕</span>
+    </div>
+
+    <div class="account-profile">
+        <div class="profile-avatar">👤</div>
+        <h3 id="accountName">User</h3>
+        <p id="accountEmail">user@email.com</p>
+    </div>
+
+    <div class="account-links">
+        <a href="dashboard.html">📚 My Courses</a>
+        <a href="#">⚙️ Profile Settings</a>
+        <a href="#" id="accountSignOut">🚪 Sign Out</a>
+    </div>
+</div>
+
+<div class="account-overlay" id="accountOverlay"></div>
+<!-- ===========================
      NEWS TICKER
 =========================== -->
 
@@ -128,9 +151,8 @@
 
         <div class="hero-buttons">
 
-            <a href="#" class="primary-btn">Explore Products</a>
-
-            <a href="#" class="secondary-btn">Learn More</a>
+            <a href="#" class="primary-btn guest-gate" data-message="Our full product catalog is coming soon! We'll update you as soon as it's ready.">Explore Products</a>
+            <a href="#" class="secondary-btn guest-gate" data-message="More about IUEX Globe.Net is coming soon! Stay turned for updates.">Learn More</a>
 
         </div>
 
@@ -180,8 +202,7 @@
 
             </ul>
 
-            <a href="#" class="learn-btn">
-                Learn More
+            <a href="#" class="learn-btn guest-gate" data-message="A full company overview page is coming soon!">Learn More
             </a>
 
         </div>
@@ -234,8 +255,7 @@
                 opportunities through one intelligent digital platform.
             </p>
 
-            <a href="#">Learn More →</a>
-
+            <a href="#" class="guest-gate" data-message="Full ELink product details are coming soon!">Learn More →</a>
         </div>
 
         <!-- ERoute -->
@@ -251,15 +271,14 @@
                 flights, transportation, and digital travel experiences.
             </p>
 
-            <a href="#">Learn More →</a>
-
+            <a href="#" class="guest-gate" data-message="Full ERoute product details are coming soon!">Learn More →</a>
         </div>
 
     </div>
 
     <div class="products-btn">
 
-        <a href="#" class="learn-btn">
+        <a href="#" class="learn-btn guest-gate" data-message="Our full product catalog is coming soon! Stay tuned.">
             View All Products
         </a>
 
@@ -375,7 +394,7 @@
 
     <div class="services-btn">
 
-        <a href="#" class="learn-btn">Explore Services</a>
+        <a href="courses.html" class="learn-btn">Explore Services</a>
 
     </div>
 
@@ -703,10 +722,8 @@ We put customers at the center of everything we do.
 
         <div class="cta-buttons">
 
-            <a href="#" class="cta-primary protected-action">Get Started</a>
-
-            <a href="#services" class="cta-secondary">Explore Courses</a>
-
+         <a href="signup.html" class="cta-primary" id="ctaGetStarted">Get Started</a>
+         <a href="courses.html" class="cta-secondary">Explore Courses</a>
         </div>
 
     </div>
@@ -856,19 +873,12 @@ We put customers at the center of everything we do.
      WHATSAPP SUPPORT BUTTON
 =========================== -->
 
-<a href="https://wa.me/2348080423490"
-   class="whatsapp-help"
-   target="_blank"
-   aria-label="Chat on WhatsApp">
-
-    <span class="help-text">Need Help?</span>
-
-    <span class="whatsapp-icon">💬</span>
+<a href="https://wa.me/2348080423490?text=Hello%20IUEX%20Globe.Net%2C%20I%20need%20some%20help." class="whatsapp-help" target="_blank">
+    Need Help? <span>...</span>
 </a>
 <script src="js/news.js"></script>
 <script src="js/navbar.js"></script>
 <script src="js/script.js"></script>
 
 </body>
-
 </html>

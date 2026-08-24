@@ -7,7 +7,7 @@ const newsData = [
     description:
       "ELink, our professional networking and job ecosystem app, is set to launch in December 2026. We'll get in touch with you here for any further information, changes, or launch postponements.",
     date: "Updated: Jul 2026",
-    icon: "images/Logo/Elink logo without name.png" // your existing ELink icon
+    icon: "images/Logo/Elink logo without name.png"
   },
   {
     category: "product",
@@ -15,7 +15,7 @@ const newsData = [
     description:
       "ERoute, our smart travel and booking platform, is scheduled to launch in early 2027. We'll get in touch with you here for any further information, changes, or launch postponements.",
     date: "Updated: Jul 2026",
-    icon: "images/Logo/Eroute logo without name.png" // your existing ERoute icon
+    icon: "images/Logo/Eroute logo without name.png"
   },
   {
     category: "company",
@@ -57,8 +57,8 @@ function renderNews(filter = "all") {
   grid.innerHTML = filtered
     .map((item) => {
       const iconHTML = item.icon.startsWith("svg-")
-      ? `<div class="news-icon">${svgIcons[item.icon]}</div>`
-      : `<img src="${item.icon}" alt="${item.title}" class="news-icon">`;
+        ? `<div class="news-icon">${svgIcons[item.icon]}</div>`
+        : `<img src="${item.icon}" alt="${item.title}" class="news-icon">`;
 
       return `
         <div class="news-card">

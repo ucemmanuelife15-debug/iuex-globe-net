@@ -8,6 +8,10 @@
         height:75px;
     }
 
+    body{
+        padding-top: 75px;
+    }
+
     .nav-links{
         position:fixed;
         top:75px;
@@ -285,5 +289,23 @@
         width:28px;
         height:28px;
         font-size:.9rem;
+    }
+}
+@media (max-width:768px){
+    .account-panel{
+        width: 180px;
+        right: -180px;
+        padding: 16px;
+    }
+}
+@media (max-width:400px){
+    .ticker-item{
+        font-size: 14px;
+        white-space: nowrap;
+        padding: 0 10px;
+    }
+    .ticker-icon{
+        width: 18px;
+        height: 18px;
     }
 }

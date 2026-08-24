@@ -73,6 +73,90 @@ document.addEventListener("DOMContentLoaded", () => {
       My Account
     `;
     navGetStarted.href = "dashboard.html";
+    navGetStarted.classList.remove("cta-btn");
     navGetStarted.classList.add("nav-profile");
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const navGetStarted = document.getElementById("navGetStarted");
+  const accountPanel = document.getElementById("accountPanel");
+  const accountOverlay = document.getElementById("accountOverlay");
+  const accountClose = document.getElementById("accountClose");
+  const accountSignOut = document.getElementById("accountSignOut");
+  const accountName = document.getElementById("accountName");
+  const accountEmail = document.getElementById("accountEmail");
+
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  if (isLoggedIn && navGetStarted) {
+    navGetStarted.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
+      if (savedAccount) {
+        accountName.textContent = savedAccount.fullname.split(" ")[0];
+        accountEmail.textContent = savedAccount.email;
+      }
+
+      accountPanel.classList.add("active");
+      accountOverlay.classList.add("active");
+    });
+  }
+
+  function closePanel() {
+    accountPanel.classList.remove("active");
+    accountOverlay.classList.remove("active");
+  }
+
+  if (accountClose) accountClose.addEventListener("click", closePanel);
+  if (accountOverlay) accountOverlay.addEventListener("click", closePanel);
+
+  if (accountSignOut) {
+    accountSignOut.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "index.html";
+    });
+  }
+  const ctaGetStarted = document.getElementById("ctaGetStarted");
+  const isLoggedInCheck = localStorage.getItem("isLoggedIn") === "true";
+
+  if (ctaGetStarted && isLoggedInCheck) {
+    ctaGetStarted.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
+      if (savedAccount) {
+        accountName.textContent = savedAccount.fullname.split(" ")[0];
+        accountEmail.textContent = savedAccount.email;
+      }
+
+      accountPanel.classList.add("active");
+      accountOverlay.classList.add("active");
+    });
+  }
+  const profileSettingsLink = document.querySelector(".account-links a[href='#']:not(#accountSignOut)");
+
+  if (profileSettingsLink) {
+    profileSettingsLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      alert("Profile Settings coming soon!");
+    });
+  }
+});
+const guestGateButtons = document.querySelectorAll(".guest-gate");
+
+  guestGateButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+      const message = btn.getAttribute("data-message") || "This feature is coming soon!";
+
+      if (loggedIn) {
+        alert(message);
+      } else {
+        window.location.href = "signup.html";
+      }
+    });
+  });
