@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const catalogEmpty = document.getElementById("catalogEmpty");
 
   try {
-    const response = await fetch("http://localhost:5000/api/courses");
+   const response = await fetch("https://iuex-globe-net-backend.onrender.com/api/courses");
     const courses = await response.json();
 
     if (courses.length === 0) {

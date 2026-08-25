@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
  // ===== SIGN UP LOGIC =====
   const signupForm = document.querySelector(".auth-form");
 
-  if (signupForm) {
+    if (signupForm) {
+    const signupButton = signupForm.querySelector(".auth-submit");
+    const signupButtonOriginalText = signupButton.textContent;
+
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -22,8 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      signupButton.disabled = true;
+      signupButton.textContent = "Please wait...";
+
       try {
-        const response = await fetch("http://localhost:5000/api/auth/signup", {
+        const response = await fetch("https://iuex-globe-net-backend.onrender.com/api/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ fullname, email, password }),
@@ -35,24 +41,34 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = "signin.html";
         } else {
           alert(data.message);
+          signupButton.disabled = false;
+          signupButton.textContent = signupButtonOriginalText;
         }
       } catch (error) {
         alert("Something went wrong. Please try again.");
+        signupButton.disabled = false;
+        signupButton.textContent = signupButtonOriginalText;
       }
     });
   }
  // ===== SIGN IN LOGIC =====
   const signinForm = document.querySelector(".signin-form");
 
-  if (signinForm) {
+    if (signinForm) {
+    const signinButton = signinForm.querySelector(".auth-submit");
+    const signinButtonOriginalText = signinButton.textContent;
+
     signinForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
+      signinButton.disabled = true;
+      signinButton.textContent = "Please wait...";
+
       try {
-        const response = await fetch("http://localhost:5000/api/auth/signin", {
+        const response = await fetch("https://iuex-globe-net-backend.onrender.com/api/auth/signin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -66,9 +82,13 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = "index.html";
         } else {
           alert(data.message);
+          signinButton.disabled = false;
+          signinButton.textContent = signinButtonOriginalText;
         }
       } catch (error) {
         alert("Something went wrong. Please try again.");
+        signinButton.disabled = false;
+        signinButton.textContent = signinButtonOriginalText;
       }
     });
   }
