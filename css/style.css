@@ -1852,12 +1852,31 @@ ul{
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
+.course-image {
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #f0f0f0;
+}
+
+.course-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .course-card h3 {
   font-size: 20px;
   margin-bottom: 8px;
   color: var(--charcoal, #222);
 }
-
+.courses-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #777;
+  font-size: 16px;
+}
 .course-category {
   display: inline-block;
   font-size: 12px;
