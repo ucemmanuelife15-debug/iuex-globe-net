@@ -2182,3 +2182,16 @@ ul{
 .eroute-theme .step-item span {
   background: #22C55E;
 }
+.password-field {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}

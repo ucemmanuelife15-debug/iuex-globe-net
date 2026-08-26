@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
- // ===== SIGN UP LOGIC =====
+  // ===== SIGN UP LOGIC =====
   const signupForm = document.querySelector(".auth-form");
 
-    if (signupForm) {
+  if (signupForm) {
     const signupButton = signupForm.querySelector(".auth-submit");
     const signupButtonOriginalText = signupButton.textContent;
 
@@ -37,13 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = await response.json();
 
-                if (response.ok) {
-          if (signupForm.classList.contains("elink-signup-form")) {
-            alert("You're on the ELink waitlist! We'll notify you the moment ELink launches.");
-            window.location.href = "elink.html?joined=true";
-          } else {
-            window.location.href = "signin.html";
-          }
+        if (response.ok) {
+          window.location.href = "signin.html";
         } else {
           alert(data.message);
           signupButton.disabled = false;
@@ -56,10 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
- // ===== SIGN IN LOGIC =====
+
+  // ===== SIGN IN LOGIC =====
   const signinForm = document.querySelector(".signin-form");
 
-    if (signinForm) {
+  if (signinForm) {
     const signinButton = signinForm.querySelector(".auth-submit");
     const signinButtonOriginalText = signinButton.textContent;
 
@@ -97,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
   // ===== DASHBOARD LOGIC =====
   const welcomeMessage = document.getElementById("welcomeMessage");
   const signOutBtn = document.getElementById("signOutBtn");
@@ -114,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "index.html";
     });
   }
+
   // ===== GOOGLE BUTTON PLACEHOLDER =====
   const googleButtons = document.querySelectorAll(".google-btn");
 
@@ -122,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Google Sign-In is coming soon! Please use email sign up for now.");
     });
   });
-});
+
   // ===== FORGOT PASSWORD LOGIC =====
   const forgotPasswordForm = document.querySelector(".forgot-password-form");
 
@@ -215,3 +213,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+});

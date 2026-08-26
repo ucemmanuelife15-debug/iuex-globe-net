@@ -21,7 +21,7 @@
             <h1>Join ELink</h1>
             <p class="auth-subtext">ELink is currently in development. Sign up now to be notified the moment it launches, and get early access.</p>
 
-            <form class="auth-form elink-signup-form">
+               <form id="waitlistForm" class="auth-form">
 
                 <label for="fullname">Full Name</label>
                 <input type="text" id="fullname" placeholder="Enter your full name" required>
@@ -30,7 +30,10 @@
                 <input type="email" id="email" placeholder="Enter your email" required>
 
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Create a password" required>
+                <div class="password-field">
+                    <input type="password" id="password" placeholder="Create a password" required>
+                    <span class="toggle-password" id="togglePassword">👁</span>
+                </div>
 
                 <div class="auth-terms">
                     <input type="checkbox" id="terms" required>
@@ -39,7 +42,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="cta-btn auth-submit">Join ELink Waitlist</button>
+                <button type="submit" class="cta-btn auth-submit" id="waitlistBtn">Join ELink Waitlist</button>
 
             </form>
 
@@ -51,7 +54,64 @@
 
     </div>
 
-    <script src="js/auth.js"></script>
+    <script>
+      const togglePassword = document.getElementById("togglePassword");
+      const passwordInput = document.getElementById("password");
+      togglePassword.addEventListener("click", () => {
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        togglePassword.textContent = isHidden ? "🙈" : "👁";
+      });
+
+      const waitlistForm = document.getElementById("waitlistForm");
+      const waitlistBtn = document.getElementById("waitlistBtn");
+      const originalBtnText = waitlistBtn.textContent;
+
+      waitlistForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const fullname = document.getElementById("fullname").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const termsChecked = document.getElementById("terms").checked;
+
+        if (!fullname || !email || !password) {
+          alert("Please fill in all fields.");
+          return;
+        }
+
+        if (!termsChecked) {
+          alert("Please agree to the Terms & Conditions to continue.");
+          return;
+        }
+
+        waitlistBtn.disabled = true;
+        waitlistBtn.textContent = "Please wait...";
+
+        try {
+          const response = await fetch("https://iuex-globe-net-backend.onrender.com/api/auth/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fullname, email, password }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("You're on the ELink waitlist! We'll notify you the moment ELink launches.");
+            window.location.href = "elink.html?joined=true";
+          } else {
+            alert(data.message);
+            waitlistBtn.disabled = false;
+            waitlistBtn.textContent = originalBtnText;
+          }
+        } catch (error) {
+          alert("Something went wrong. Please try again.");
+          waitlistBtn.disabled = false;
+          waitlistBtn.textContent = originalBtnText;
+        }
+      });
+    </script>
 
 </body>
 </html>
