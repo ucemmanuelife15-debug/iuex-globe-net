@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - IUEX Globe.Net</title>
+    <title>My Courses - IUEX Globe.Net</title>
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -20,11 +20,17 @@
             </div>
 
             <h1 id="welcomeMessage">Welcome!</h1>
-            <p class="auth-subtext">
-                This is your dashboard. Courses, job listings, and more will appear here soon.
-            </p>
 
-            <button id="signOutBtn" class="cta-btn auth-submit">Sign Out</button>
+            <div class="my-courses-empty">
+                <div class="catalog-empty-icon">📚</div>
+                <h3>No Enrolled Courses Yet</h3>
+                <p class="auth-subtext">
+                    You haven't enrolled in any courses yet. Browse our catalog to get started once enrollment opens.
+                </p>
+                <a href="courses.html" class="cta-btn">Explore Courses</a>
+            </div>
+
+            <button id="signOutBtn" class="cta-btn-outline auth-submit">Sign Out</button>
 
         </div>
 

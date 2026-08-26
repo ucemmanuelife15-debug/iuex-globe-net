@@ -1,5 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  // ===== PASSWORD SHOW/HIDE TOGGLE =====
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener("click", () => {
+      const isHidden = passwordInput.type === "password";
+      passwordInput.type = isHidden ? "text" : "password";
+      togglePassword.textContent = isHidden ? "🙈" : "👁";
+    });
+  }
+
   // ===== SIGN UP LOGIC =====
   const signupForm = document.querySelector(".auth-form");
 
