@@ -110,4 +110,24 @@ router.post("/reset-password", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+// Join product waitlist (for already-registered users)
+router.post("/join-waitlist", async (req, res) => {
+  try {
+    const { email, product } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Account not found" });
+    }
+
+    if (!user.interestedProducts.includes(product)) {
+      user.interestedProducts.push(product);
+      await user.save();
+    }
+
+    res.status(200).json({ message: `You're on the ${product} waitlist!` });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 module.exports = router;

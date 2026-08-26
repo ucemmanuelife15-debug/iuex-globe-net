@@ -37,8 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = await response.json();
 
-        if (response.ok) {
-          window.location.href = "signin.html";
+                if (response.ok) {
+          if (signupForm.classList.contains("elink-signup-form")) {
+            alert("You're on the ELink waitlist! We'll notify you the moment ELink launches.");
+            window.location.href = "elink.html?joined=true";
+          } else {
+            window.location.href = "signin.html";
+          }
         } else {
           alert(data.message);
           signupButton.disabled = false;
