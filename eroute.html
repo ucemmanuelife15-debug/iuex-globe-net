@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERoute - Making Every Journey Easier | IUEX Globe.Net</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <div class="product-page eroute-theme">
+
+        <div id="joinedBanner" class="joined-banner" style="display: none;">
+            🎉 Thanks for joining the ERoute waitlist! We'll email you the moment we launch.
+        </div>
+
+        <div class="product-header">
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <img src="images/Logo/Eroute logo with name.png" alt="ERoute Logo" class="product-logo">
+            <span class="section-tag">FLIGHT SEARCH & BOOKING PLATFORM</span>
+            <h1 class="visually-hidden">ERoute</h1>
+            <p class="product-tagline">"Making Every Journey Easier"</p>
+            <p class="product-intro">
+                A digital travel platform that makes air travel easier — search flights, compare options,
+                book with confidence, and manage your reservations all in one place.
+            </p>
+            <div class="product-cta-group">
+                <button class="cta-btn eroute-cta">Get Started</button>
+                <button class="cta-btn-outline eroute-cta">Explore as Guest</button>
+            </div>
+        </div>
+
+        <div class="product-section">
+            <h2>Who It's For</h2>
+            <div class="user-types-grid">
+                <div class="user-type-card">
+                    <h3>Individual Travelers</h3>
+                    <p>People planning personal trips, near or far.</p>
+                </div>
+                <div class="user-type-card">
+                    <h3>Families & Groups</h3>
+                    <p>Coordinated bookings for multiple travelers at once.</p>
+                </div>
+                <div class="user-type-card">
+                    <h3>Business Travelers</h3>
+                    <p>Fast, reliable booking for work-related travel.</p>
+                </div>
+                <div class="user-type-card">
+                    <h3>Students & Tourists</h3>
+                    <p>Affordable, easy flight discovery for trips and adventures.</p>
+                </div>
+                <div class="user-type-card">
+                    <h3>Travel Agents</h3>
+                    <p>Professionals managing bookings on behalf of clients.</p>
+                </div>
+                <div class="user-type-card">
+                    <h3>Corporate Organizations</h3>
+                    <p>Businesses managing travel for their teams.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-section">
+            <h2>Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">Flight search (one-way &amp; round-trip)</div>
+                <div class="feature-item">Flight comparison</div>
+                <div class="feature-item">Airline &amp; route information</div>
+                <div class="feature-item">Flight booking</div>
+                <div class="feature-item">Passenger information management</div>
+                <div class="feature-item">Digital tickets &amp; itineraries</div>
+                <div class="feature-item">Booking history</div>
+                <div class="feature-item">Travel notifications</div>
+                <div class="feature-item">Secure online payments</div>
+                <div class="feature-item">Cancellation &amp; refund management</div>
+            </div>
+        </div>
+
+        <div class="product-section">
+            <h2>How It Works</h2>
+            <div class="how-it-works-grid">
+                <div class="step-item"><span>1</span>Enter departure &amp; destination</div>
+                <div class="step-item"><span>2</span>Select travel date &amp; passengers</div>
+                <div class="step-item"><span>3</span>Compare available flights</div>
+                <div class="step-item"><span>4</span>Select your flight</div>
+                <div class="step-item"><span>5</span>Enter passenger details</div>
+                <div class="step-item"><span>6</span>Make payment &amp; confirm</div>
+            </div>
+        </div>
+
+        <div class="product-vision">
+            <h2>Our Vision</h2>
+            <p>
+                ERoute is intended to grow into a broader digital travel platform — eventually supporting flights,
+                hotels, travel services, transportation, and more, all connected to the travel industry.
+            </p>
+        </div>
+
+        <div class="product-final-cta">
+            <h2>Be the First to Know</h2>
+            <p>ERoute is currently in development. Sign up today so we can notify you the moment it launches.</p>
+            <button class="cta-btn eroute-cta">Get Notified</button>
+        </div>
+
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("joined") === "true") {
+        document.getElementById("joinedBanner").style.display = "block";
+      }
+
+      document.querySelectorAll(".eroute-cta").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+          if (!isLoggedIn) {
+            window.location.href = "eroute-signup.html";
+            return;
+          }
+
+          const userAccount = JSON.parse(localStorage.getItem("userAccount"));
+          const originalText = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = "Please wait...";
+
+          try {
+            const response = await fetch("https://iuex-globe-net-backend.onrender.com/api/auth/join-waitlist", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: userAccount.email, product: "eroute" }),
+            });
+
+            if (response.ok) {
+              window.location.href = "eroute.html?joined=true";
+            } else {
+              alert("Something went wrong. Please try again.");
+              btn.disabled = false;
+              btn.textContent = originalText;
+            }
+          } catch (error) {
+            alert("Something went wrong. Please try again.");
+            btn.disabled = false;
+            btn.textContent = originalText;
+          }
+        });
+      });
+    </script>
+
+</body>
+</html>
