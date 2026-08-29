@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - IUEX Globe.Net</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <div class="product-page">
+
+        <div class="product-header">
+            <a href="index.html" class="back-link">← Back to Home</a>
+            <span class="section-tag">WHO WE ARE</span>
+            <h1>Building Africa's Next Generation Technology Company</h1>
+            <p class="product-intro">
+                IUEX Globe.Net is a technology company dedicated to building innovative digital products and
+                services that empower individuals, businesses, and communities through software, cybersecurity,
+                cloud technologies, AI, and digital transformation.
+            </p>
+        </div>
+
+        <div class="product-section">
+            <h2>Our Story</h2>
+            <p style="max-width: 700px; margin: 0 auto 20px; line-height: 1.7; color: #444;">
+                IUEX Globe.Net was founded with a simple but ambitious belief: that technology, when built
+                thoughtfully, can open doors — connecting people to skills, opportunities, and each other. What
+                started as a vision to build practical, real-world digital products has grown into a company
+                developing multiple products, including ELink and ERoute, alongside coding education designed
+                to equip the next generation of African tech talent.
+            </p>
+        </div>
+
+        <div class="product-section">
+            <h2>What We Do</h2>
+            <div class="features-grid">
+                <div class="feature-item">Software Development</div>
+                <div class="feature-item">Mobile App Development</div>
+                <div class="feature-item">Web Development</div>
+                <div class="feature-item">Cloud Computing &amp; Development</div>
+                <div class="feature-item">Cybersecurity</div>
+                <div class="feature-item">Artificial Intelligence</div>
+                <div class="feature-item">Data &amp; Digital Transformation</div>
+                <div class="feature-item">Coding Education</div>
+            </div>
+        </div>
+
+        <div class="product-vision">
+            <h2>Our Vision</h2>
+            <p>
+                To become a globally recognized technology company that empowers people and businesses through
+                innovative, secure, and accessible digital solutions.
+            </p>
+        </div>
+
+        <div class="product-vision">
+            <h2>Our Mission</h2>
+            <p>
+                To design and deliver world-class software, digital platforms, and technology services that solve
+                real-world problems while creating opportunities across Africa and beyond.
+            </p>
+        </div>
+
+                <div class="product-final-cta">
+            <h2>Join Us on This Journey</h2>
+            <p>Be part of our growing community as we build the future of technology, together.</p>
+            <a href="signup.html" class="cta-btn" id="aboutGetStartedBtn">Get Started</a>
+        </div>
+
+    </div>
+         <script>
+      document.getElementById("aboutGetStartedBtn").addEventListener("click", (e) => {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (isLoggedIn) {
+          e.preventDefault();
+          window.location.href = "index.html?openAccount=true";
+        }
+        // if not logged in, href="signup.html" works normally
+      });
+    </script>
+</body>
+</html>

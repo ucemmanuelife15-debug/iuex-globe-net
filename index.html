@@ -141,8 +141,8 @@
 
         <div class="hero-buttons">
 
-            <a href="#" class="primary-btn guest-gate" data-message="Our full product catalog is coming soon! We'll update you as soon as it's ready.">Explore Products</a>
-            <a href="#" class="secondary-btn guest-gate" data-message="More about IUEX Globe.Net is coming soon! Stay turned for updates.">Learn More</a>
+                       <a href="#products" class="primary-btn" id="exploreProductsBtn">Explore Products</a>
+            <a href="about.html" class="secondary-btn">Learn More</a>
 
         </div>
 
@@ -192,8 +192,7 @@
 
             </ul>
 
-            <a href="#" class="learn-btn guest-gate" data-message="A full company overview page is coming soon!">Learn More
-            </a>
+          <a href="about.html" class="learn-btn">Learn More</a>
 
         </div>
 
@@ -833,6 +832,27 @@ We put customers at the center of everything we do.
 <script src="js/news.js"></script>
 <script src="js/navbar.js"></script>
 <script src="js/script.js"></script>
+    <script>
+      document.getElementById("exploreProductsBtn").addEventListener("click", (e) => {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (!isLoggedIn) {
+          e.preventDefault();
+          window.location.href = "signup.html";
+        }
+        // if logged in, the href="#products" already works normally
+      });
+    </script>
+        <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("openAccount") === "true") {
+        const accountPanel = document.getElementById("accountPanel");
+        const accountOverlay = document.getElementById("accountOverlay");
+        if (accountPanel && accountOverlay) {
+          accountPanel.classList.add("active");
+          accountOverlay.classList.add("active");
+        }
+      }
+    </script>
 
 </body>
 </html>
