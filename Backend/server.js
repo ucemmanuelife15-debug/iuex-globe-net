@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
+const gameRoutes = require("./routes/game");
 
 const app = express();
 app.use(cors());
@@ -13,6 +14,7 @@ const PORT = 5000;
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/game", gameRoutes);
 app.post("/api/test", (req, res) => {
   res.json({ message: "Test route works!" });
 });
