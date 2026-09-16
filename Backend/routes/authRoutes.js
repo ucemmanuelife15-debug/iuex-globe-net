@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const transporter = require("../emailConfig");
+const resend = require("../emailConfig");
 
 // Sign Up route
 router.post("/signup", async (req, res) => {
@@ -68,17 +68,17 @@ router.post("/forgot-password", async (req, res) => {
 
     const resetLink = `http://127.0.0.1:5500/reset-password.html?token=${resetToken}`;
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: user.email,
-      subject: "Reset Your IUEX Globe.Net Password",
-      html: `
-        <p>Hi ${user.fullname},</p>
-        <p>You requested to reset your password. Click the link below to set a new one:</p>
-        <p><a href="${resetLink}">${resetLink}</a></p>
-        <p>This link will expire in 15 minutes. If you didn't request this, you can safely ignore this email.</p>
-      `,
-    });
+    await resend.emails.send({
+  from: "IUEX Globe.Net <onboarding@resend.dev>",
+  to: user.email,
+  subject: "Reset Your IUEX Globe.Net Password",
+  html: `
+    <p>Hi ${user.fullname},</p>
+    <p>You requested to reset your password. Click the link below to set a new one:</p>
+    <p><a href="${resetLink}">${resetLink}</a></p>
+    <p>This link will expire in 15 minutes. If you didn't request this, you can safely ignore this email.</p>
+  `,
+});
 
     res.status(200).json({ message: "Password reset link sent to your email" });
   } catch (error) {
