@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - IUEX Globe.Net</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f7f9fc;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 640px;
+    margin: 60px auto;
+    padding: 0 20px;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+  h1 { font-size: 24px; margin-bottom: 8px; }
+  h2 { font-size: 18px; margin-bottom: 16px; }
+  p.sub { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+  input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 14px;
+    font-family: inherit;
+  }
+
+  button {
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.9; }
+
+  #loginSection, #panelSection { display: none; }
+
+  .answer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .answer-item:last-child { border-bottom: none; }
+  .answer-text { font-size: 14px; }
+  .answer-user { color: #888; font-size: 12px; }
+  .delete-btn {
+    background: #e5484d;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+
+  .error { color: #e5484d; font-size: 14px; margin-bottom: 10px; }
+  .success { color: #128C7E; font-size: 14px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- LOGIN SECTION -->
+  <div id="loginSection" class="card" style="display:block;">
+    <h1>Admin Login</h1>
+    <p class="sub">IUEX Globe.Net — Game Admin</p>
+    <div id="loginError" class="error"></div>
+    <input type="password" id="adminPassword" placeholder="Admin password">
+    <button onclick="login()">Log In</button>
+  </div>
+
+  <!-- ADMIN PANEL SECTION -->
+  <div id="panelSection">
+
+    <div class="card">
+      <h2>Post Today's Question</h2>
+      <div id="createMsg"></div>
+      <input type="text" id="questionInput" placeholder="e.g. Name a tech word starting with M">
+      <input type="text" id="categoryInput" placeholder="Category (optional, default: Tech)">
+      <button onclick="createQuestion()">Post Question</button>
+    </div>
+
+    <div class="card">
+      <h2>Current Question & Answers</h2>
+      <div id="currentQuestion">Loading...</div>
+      <div id="answersList"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
+  let adminPassword = "";
+
+  async function login() {
+    const password = document.getElementById("adminPassword").value;
+    const errorBox = document.getElementById("loginError");
+    errorBox.textContent = "";
+
+    try {
+      const res = await fetch(`${API_BASE}/admin-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        adminPassword = password;
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("panelSection").style.display = "block";
+        loadTodayQuestion();
+      } else {
+        errorBox.textContent = "Incorrect password.";
+      }
+    } catch (err) {
+      errorBox.textContent = "Could not reach server. Try again.";
+    }
+  }
+
+  async function createQuestion() {
+    const question = document.getElementById("questionInput").value.trim();
+    const category = document.getElementById("categoryInput").value.trim() || "Tech";
+    const msgBox = document.getElementById("createMsg");
+    msgBox.innerHTML = "";
+
+    if (!question) {
+      msgBox.innerHTML = '<div class="error">Please enter a question.</div>';
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, category })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        msgBox.innerHTML = '<div class="success">Question posted!</div>';
+        document.getElementById("questionInput").value = "";
+        document.getElementById("categoryInput").value = "";
+        loadTodayQuestion();
+      } else {
+        msgBox.innerHTML = `<div class="error">${data.message || 'Something went wrong.'}</div>`;
+      }
+    } catch (err) {
+      msgBox.innerHTML = '<div class="error">Could not reach server.</div>';
+    }
+  }
+
+  async function loadTodayQuestion() {
+    const questionBox = document.getElementById("currentQuestion");
+    const answersBox = document.getElementById("answersList");
+
+    try {
+      const res = await fetch(`${API_BASE}/today`);
+      if (!res.ok) {
+        questionBox.textContent = "No question set yet.";
+        answersBox.innerHTML = "";
+        return;
+      }
+      const data = await res.json();
+      questionBox.innerHTML = `<strong>${data.question}</strong> <span style="color:#888;font-size:13px;">(${data.category})</span>`;
+
+      if (!data.answers || data.answers.length === 0) {
+        answersBox.innerHTML = '<p style="color:#888;font-size:14px;margin-top:10px;">No answers yet.</p>';
+        return;
+      }
+
+      answersBox.innerHTML = data.answers.map(a => `
+        <div class="answer-item">
+          <div>
+            <div class="answer-text">${a.answer}</div>
+            <div class="answer-user">${a.username}</div>
+          </div>
+          <button class="delete-btn" onclick="deleteAnswer('${data._id}', '${a._id}')">Delete</button>
+        </div>
+      `).join("");
+
+    } catch (err) {
+      questionBox.textContent = "Could not load question.";
+    }
+  }
+
+  async function deleteAnswer(questionId, answerId) {
+    try {
+      await fetch(`${API_BASE}/answer/${questionId}/${answerId}`, {
+        method: "DELETE"
+      });
+      loadTodayQuestion();
+    } catch (err) {
+      alert("Could not delete answer. Try again.");
+    }
+  }
+</script>
+
+</body>
+</html>
