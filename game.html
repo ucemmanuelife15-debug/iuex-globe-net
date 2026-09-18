@@ -142,14 +142,29 @@
   .answer-item .name { font-weight: 600; font-size: 14px; color: var(--charcoal); }
   .answer-item .text { font-size: 15px; margin-top: 2px; white-space: pre-wrap; }
 
-  .my-delete-btn {
-    background: #e5484d;
+  .answer-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .small-btn {
     padding: 6px 12px;
     font-size: 12px;
     border-radius: 6px;
-    flex-shrink: 0;
   }
-  .my-delete-btn:hover { background: #c93c40; }
+  .edit-btn { background: var(--electric-blue); }
+  .edit-btn:hover { background: var(--primary-blue); }
+  .delete-btn-small { background: #e5484d; }
+  .delete-btn-small:hover { background: #c93c40; }
+
+  .edit-box { flex: 1; }
+  .edit-box textarea { margin-bottom: 8px; min-height: 50px; }
+  .edit-box-actions { display: flex; gap: 8px; }
+  .save-btn { background: var(--bright-green); }
+  .save-btn:hover { background: #1ea854; }
+  .cancel-btn { background: #99a3af; }
+  .cancel-btn:hover { background: #7c8894; }
 
   .empty-state {
     text-align: center;
@@ -209,6 +224,7 @@
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
   let currentQuestionId = null;
   let myEmail = null;
+  let editingAnswerId = null;
 
   document.addEventListener("DOMContentLoaded", () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -224,8 +240,11 @@
     document.getElementById("gameSection").style.display = "block";
     loadQuestion();
 
-    // Auto-refresh answers every 8 seconds so it feels shared/live
-    setInterval(loadQuestion, 8000);
+    // Auto-refresh every 8 seconds so it feels shared/live.
+    // Skipped while a user is actively editing, so it doesn't wipe their in-progress edit.
+    setInterval(() => {
+      if (!editingAnswerId) loadQuestion();
+    }, 8000);
 
     document.getElementById("answerForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -269,12 +288,17 @@
         .map(a => {
           const isMine = a.userId === myEmail;
           return `
-            <div class="answer-item">
+            <div class="answer-item" data-answer-id="${a._id}">
               <div>
                 <div class="name">${a.username}</div>
                 <div class="text">${a.answer}</div>
               </div>
-              ${isMine ? `<button class="my-delete-btn" onclick="deleteMyAnswer('${a._id}')">Delete</button>` : ""}
+              ${isMine ? `
+                <div class="answer-actions">
+                  <button class="small-btn edit-btn" onclick="startEdit('${a._id}', ${JSON.stringify(a.answer)})">Edit</button>
+                  <button class="small-btn delete-btn-small" onclick="deleteMyAnswer('${a._id}')">Delete</button>
+                </div>
+              ` : ""}
             </div>
           `;
         }).join("");
@@ -331,6 +355,45 @@
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = "Submit";
+    }
+  }
+
+  function startEdit(answerId, currentText) {
+    editingAnswerId = answerId;
+    const item = document.querySelector(`.answer-item[data-answer-id="${answerId}"]`);
+    if (!item) return;
+
+    item.innerHTML = `
+      <div class="edit-box">
+        <textarea id="editInput-${answerId}">${currentText}</textarea>
+        <div class="edit-box-actions">
+          <button class="small-btn save-btn" onclick="saveEdit('${answerId}')">Save</button>
+          <button class="small-btn cancel-btn" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function cancelEdit() {
+    editingAnswerId = null;
+    loadQuestion();
+  }
+
+  async function saveEdit(answerId) {
+    const textarea = document.getElementById(`editInput-${answerId}`);
+    const newAnswer = textarea.value.trim();
+    if (!newAnswer) return;
+
+    try {
+      await fetch(`${API_BASE}/answer/${currentQuestionId}/${answerId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer: newAnswer })
+      });
+      editingAnswerId = null;
+      loadQuestion();
+    } catch (err) {
+      alert("Could not save your edit. Try again.");
     }
   }
 

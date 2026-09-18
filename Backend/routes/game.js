@@ -31,6 +31,27 @@ router.post('/answer', async (req, res) => {
   }
 });
 
+// EDIT/update a specific answer
+router.put('/answer/:questionId/:answerId', async (req, res) => {
+  try {
+    const { questionId, answerId } = req.params;
+    const { answer } = req.body;
+    const question = await GameQuestion.findById(questionId);
+    if (!question) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+    const targetAnswer = question.answers.id(answerId);
+    if (!targetAnswer) {
+      return res.status(404).json({ message: 'Answer not found' });
+    }
+    targetAnswer.answer = answer;
+    await question.save();
+    res.json({ message: 'Answer updated', question });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
 // DELETE a specific answer from a question
 router.delete('/answer/:questionId/:answerId', async (req, res) => {
   try {
