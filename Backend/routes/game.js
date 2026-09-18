@@ -15,21 +15,17 @@ router.get('/today', async (req, res) => {
   }
 });
 
-// POST a new answer to the current question
-router.post('/answer', async (req, res) => {
-  try {
-    const { questionId, userId, username, answer } = req.body;
-    const question = await GameQuestion.findById(questionId);
-    if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
-    }
-    question.answers.push({ userId, username, answer });
-    await question.save();
-    res.json({ message: 'Answer submitted', question });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
-  }
-});
+   // POST a new question (admin use)
+   router.post('/create', async (req, res) => {
+     try {
+       const { question, category, postedBy } = req.body;
+       const newQuestion = new GameQuestion({ question, category, postedBy });
+       await newQuestion.save();
+       res.json({ message: 'Question created', newQuestion });
+     } catch (err) {
+       res.status(500).json({ message: 'Server error', error: err.message });
+     }
+   });
 
 // DELETE a specific answer from a question
 router.delete('/answer/:questionId/:answerId', async (req, res) => {

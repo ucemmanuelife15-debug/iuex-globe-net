@@ -28,6 +28,10 @@ const gameQuestionSchema = new mongoose.Schema({
     type: String,
     default: 'Tech'
   },
+       postedBy: {
+       type: String,
+       default: 'Admin'
+     },
   date: {
     type: Date,
     default: Date.now

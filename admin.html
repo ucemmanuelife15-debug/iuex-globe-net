@@ -37,6 +37,14 @@
   h2 { font-size: 18px; margin-bottom: 16px; color: var(--primary-blue); }
   p.sub { color: #667; font-size: 14px; margin-bottom: 20px; }
 
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+
   input, textarea {
     width: 100%;
     padding: 12px 14px;
@@ -99,6 +107,12 @@
     border-radius: 20px;
     margin-bottom: 10px;
   }
+
+  .posted-by {
+    font-size: 13px;
+    color: #8899aa;
+    margin-bottom: 14px;
+  }
 </style>
 </head>
 <body>
@@ -107,6 +121,7 @@
 
   <!-- LOGIN SECTION -->
   <div id="loginSection" class="card" style="display:block;">
+    <span class="badge">ADMIN ACCESS</span>
     <h1>Admin Login</h1>
     <p class="sub">IUEX Globe.Net — Game Admin</p>
     <div id="loginError" class="error"></div>
@@ -120,8 +135,16 @@
     <div class="card">
       <h2>Post Today's Question</h2>
       <div id="createMsg"></div>
+
+      <label for="posterNameInput">Your Name (shown to players as who posted it)</label>
+      <input type="text" id="posterNameInput" placeholder="e.g. Admin, or your name">
+
+      <label for="questionInput">Question</label>
       <input type="text" id="questionInput" placeholder="e.g. Name a tech word starting with M">
-      <input type="text" id="categoryInput" placeholder="Category (optional, default: Tech)">
+
+      <label for="categoryInput">Category</label>
+      <input type="text" id="categoryInput" placeholder="Optional, default: Tech">
+
       <button onclick="createQuestion()">Post Question</button>
     </div>
 
@@ -138,6 +161,15 @@
 <script>
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
   let adminPassword = "";
+
+  // Remember the last name used, so the admin doesn't retype it every time
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedName = localStorage.getItem("adminPosterName");
+    if (savedName) {
+      const el = document.getElementById("posterNameInput");
+      if (el) el.value = savedName;
+    }
+  });
 
   async function login() {
     const password = document.getElementById("adminPassword").value;
@@ -166,6 +198,7 @@
   }
 
   async function createQuestion() {
+    const postedBy = document.getElementById("posterNameInput").value.trim() || "Admin";
     const question = document.getElementById("questionInput").value.trim();
     const category = document.getElementById("categoryInput").value.trim() || "Tech";
     const msgBox = document.getElementById("createMsg");
@@ -176,11 +209,13 @@
       return;
     }
 
+    localStorage.setItem("adminPosterName", postedBy);
+
     try {
       const res = await fetch(`${API_BASE}/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, category })
+        body: JSON.stringify({ question, category, postedBy })
       });
       const data = await res.json();
 
@@ -209,7 +244,10 @@
         return;
       }
       const data = await res.json();
-      questionBox.innerHTML = `<strong>${data.question}</strong> <span style="color:#8899aa;font-size:13px;">(${data.category})</span>`;
+      questionBox.innerHTML = `
+        <strong>${data.question}</strong> <span style="color:#8899aa;font-size:13px;">(${data.category})</span>
+        <div class="posted-by">Posted by: ${data.postedBy || 'Admin'}</div>
+      `;
 
       if (!data.answers || data.answers.length === 0) {
         answersBox.innerHTML = '<p style="color:#8899aa;font-size:14px;margin-top:10px;">No answers yet.</p>';
