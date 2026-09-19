@@ -6,17 +6,35 @@ const crypto = require("crypto");
 const resend = require("../emailConfig");
 
 // Sign Up route
+router.post("/signup", async (req, res) => {
+  try {
+    const { fullname, email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({ fullname, email, password: hashedPassword });
+    await newUser.save();
+    res.status(201).json({ message: "Account created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// Sign In route
 router.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-   // Check password against hashed version
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -32,28 +50,7 @@ router.post("/signin", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-// Sign In route
-router.post("/signin", async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-   // Check password against hashed version
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    res.status(200).json({ message: "Signed in successfully", fullname: user.fullname });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-});
 // Forgot Password route
 router.post("/forgot-password", async (req, res) => {
   try {
@@ -74,22 +71,23 @@ router.post("/forgot-password", async (req, res) => {
     const resetLink = `http://127.0.0.1:5500/reset-password.html?token=${resetToken}`;
 
     await resend.emails.send({
-  from: "IUEX Globe.Net <onboarding@resend.dev>",
-  to: user.email,
-  subject: "Reset Your IUEX Globe.Net Password",
-  html: `
-    <p>Hi ${user.fullname},</p>
-    <p>You requested to reset your password. Click the link below to set a new one:</p>
-    <p><a href="${resetLink}">${resetLink}</a></p>
-    <p>This link will expire in 15 minutes. If you didn't request this, you can safely ignore this email.</p>
-  `,
-});
+      from: "IUEX Globe.Net <onboarding@resend.dev>",
+      to: user.email,
+      subject: "Reset Your IUEX Globe.Net Password",
+      html: `
+        <p>Hi ${user.fullname},</p>
+        <p>You requested to reset your password. Click the link below to set a new one:</p>
+        <p><a href="${resetLink}">${resetLink}</a></p>
+        <p>This link will expire in 15 minutes. If you didn't request this, you can safely ignore this email.</p>
+      `,
+    });
 
     res.status(200).json({ message: "Password reset link sent to your email" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 // Reset Password route
 router.post("/reset-password", async (req, res) => {
   try {
@@ -115,6 +113,7 @@ router.post("/reset-password", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 // Join product waitlist (for already-registered users)
 router.post("/join-waitlist", async (req, res) => {
   try {
@@ -135,6 +134,7 @@ router.post("/join-waitlist", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 // GET all users who joined a product waitlist (admin use)
 router.get("/waitlist-users", async (req, res) => {
   try {
@@ -145,7 +145,7 @@ router.get("/waitlist-users", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-module.exports = router;
+
 // GET all users (for admin management)
 router.get("/all-users", async (req, res) => {
   try {

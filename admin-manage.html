@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Admins - IUEX Globe.Net</title>
+<style>
+  :root {
+    --primary-blue: #0B4F9C;
+    --electric-blue: #12A8F5;
+    --bright-green: #22C55E;
+    --white: #FFFFFF;
+    --light-gray: #F5F7FA;
+    --charcoal: #222831;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--light-gray);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  .top-bar { padding: 20px 30px; }
+  .back-link {
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(11, 79, 156, 0.08);
+    color: var(--primary-blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  h1 { font-size: 24px; margin-bottom: 8px; color: var(--primary-blue); }
+  p.sub { color: #667; font-size: 14px; margin-bottom: 20px; }
+
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+
+  .locked-card { text-align: center; padding: 40px 20px; }
+  .locked-card p { margin-bottom: 20px; color: #667; }
+
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d0d7e2;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 14px;
+    font-family: inherit;
+  }
+  input:focus { outline: none; border-color: var(--electric-blue); }
+
+  button {
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: var(--electric-blue); }
+
+  .error { color: #e5484d; font-size: 14px; margin-bottom: 10px; }
+  .success { color: var(--bright-green); font-size: 14px; margin-bottom: 10px; font-weight: 600; }
+
+  .search-input { margin-bottom: 0; }
+
+  .user-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .user-row:last-child { border-bottom: none; }
+
+  .user-name { font-weight: 600; font-size: 14px; }
+  .user-email { font-size: 13px; color: #8899aa; margin-top: 2px; }
+
+  .role-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+  }
+  .role-main { background: rgba(11,79,156,0.1); color: var(--primary-blue); }
+  .role-admin { background: rgba(34,197,94,0.1); color: var(--bright-green); }
+
+  .small-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .promote-btn { background: var(--bright-green); }
+  .promote-btn:hover { background: #1ea854; }
+  .remove-btn { background: #e5484d; }
+  .remove-btn:hover { background: #c93c40; }
+
+  .empty-state {
+    text-align: center;
+    padding: 30px 10px;
+    color: #8899aa;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="admin-dashboard.html" class="back-link">&larr; Back to Admin Dashboard</a>
+</div>
+
+<div class="container">
+
+  <!-- Shown if not the main admin, or password not yet entered -->
+  <div id="lockedSection" style="display:block;">
+    <div class="card locked-card">
+      <span class="badge">CHAIRMAN ONLY</span>
+      <h1>Manage Admins</h1>
+      <p class="sub">Enter the admin password to continue.</p>
+      <div id="loginError" class="error"></div>
+      <input type="password" id="adminPassword" placeholder="Admin password">
+      <button onclick="unlock()">Unlock</button>
+    </div>
+  </div>
+
+  <!-- Not an admin at all -->
+  <div id="notAdminSection" style="display:none;">
+    <div class="card locked-card">
+      <h1>Access Restricted</h1>
+      <p class="sub">This area is only available to IUEX Globe.Net admins.</p>
+      <a href="index.html" class="back-link">Return to Home</a>
+    </div>
+  </div>
+
+  <!-- Main panel -->
+  <div id="panelSection" style="display:none;">
+    <span class="badge">CHAIRMAN ONLY</span>
+    <h1>Manage Admins</h1>
+    <p class="sub">Promote users to admin, or remove admin access.</p>
+
+    <div class="card">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search by name or email..." oninput="renderList()">
+    </div>
+
+    <div class="card">
+      <div id="userList">Loading...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
+  const AUTH_BASE = "https://iuex-globe-net-backend.onrender.com/api/auth";
+  let allUsers = [];
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+
+    if (!isLoggedIn || !savedAccount || !savedAccount.isAdmin) {
+      document.getElementById("lockedSection").style.display = "none";
+      document.getElementById("notAdminSection").style.display = "block";
+    }
+  });
+
+  async function unlock() {
+    const password = document.getElementById("adminPassword").value;
+    const errorBox = document.getElementById("loginError");
+    errorBox.textContent = "";
+
+    try {
+      const res = await fetch(`${API_BASE}/admin-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById("lockedSection").style.display = "none";
+        document.getElementById("panelSection").style.display = "block";
+        loadUsers();
+      } else {
+        errorBox.textContent = "Incorrect password.";
+      }
+    } catch (err) {
+      errorBox.textContent = "Could not reach server. Try again.";
+    }
+  }
+
+  async function loadUsers() {
+    const userList = document.getElementById("userList");
+    try {
+      const res = await fetch(`${AUTH_BASE}/all-users`);
+      allUsers = await res.json();
+      renderList();
+    } catch (err) {
+      userList.innerHTML = '<div class="empty-state">Could not load users.</div>';
+    }
+  }
+
+  function renderList() {
+    const userList = document.getElementById("userList");
+    const search = document.getElementById("searchInput").value.trim().toLowerCase();
+
+    let filtered = allUsers;
+    if (search) {
+      filtered = allUsers.filter(u =>
+        u.fullname.toLowerCase().includes(search) ||
+        u.email.toLowerCase().includes(search)
+      );
+    }
+
+    if (filtered.length === 0) {
+      userList.innerHTML = '<div class="empty-state">No users found.</div>';
+      return;
+    }
+
+    userList.innerHTML = filtered.map(u => {
+      let roleTag = "";
+      if (u.isMainAdmin) roleTag = '<span class="role-tag role-main">Main Admin</span>';
+      else if (u.isAdmin) roleTag = '<span class="role-tag role-admin">Admin</span>';
+
+      let actionBtn = "";
+      if (u.isMainAdmin) {
+        actionBtn = "";
+      } else if (u.isAdmin) {
+        actionBtn = `<button class="small-btn remove-btn" onclick="removeAdmin('${u._id}')">Remove Admin</button>`;
+      } else {
+        actionBtn = `<button class="small-btn promote-btn" onclick="makeAdmin('${u._id}')">Make Admin</button>`;
+      }
+
+      return `
+        <div class="user-row">
+          <div>
+            <div class="user-name">${u.fullname}${roleTag}</div>
+            <div class="user-email">${u.email}</div>
+          </div>
+          ${actionBtn}
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function makeAdmin(id) {
+    try {
+      await fetch(`${AUTH_BASE}/make-admin/${id}`, { method: "PUT" });
+      loadUsers();
+    } catch (err) {
+      alert("Could not promote user. Try again.");
+    }
+  }
+
+  async function removeAdmin(id) {
+    if (!confirm("Remove this user's admin access?")) return;
+    try {
+      const res = await fetch(`${AUTH_BASE}/remove-admin/${id}`, { method: "PUT" });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.message || "Could not remove admin access.");
+        return;
+      }
+      loadUsers();
+    } catch (err) {
+      alert("Could not remove admin access. Try again.");
+    }
+  }
+</script>
+
+</body>
+</html>
