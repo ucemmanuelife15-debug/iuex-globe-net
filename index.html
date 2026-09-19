@@ -84,11 +84,12 @@
         <p id="accountEmail">user@email.com</p>
     </div>
 
-    <div class="account-links">
-        <a href="dashboard.html">📚 My Courses</a>
-        <a href="#">⚙️ Profile Settings</a>
-        <a href="#" id="accountSignOut">🚪 Sign Out</a>
-    </div>
+   <div class="account-links">
+    <a href="dashboard.html">📚 My Courses</a>
+    <a href="#">⚙️ Profile Settings</a>
+    <a href="admin.html" id="adminLink" style="display:none;">🛡️ Admin</a>
+    <a href="#" id="accountSignOut">🚪 Sign Out</a>
+   </div>
 </div>
 
 <div class="account-overlay" id="accountOverlay"></div>
@@ -637,18 +638,18 @@ We put customers at the center of everything we do.
             <p>Grow from beginner to advanced developer confidently.</p>
         </div>
 
-        <div class="why-item">
-            <div class="why-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                    <line x1="9" y1="9" x2="9.01" y2="9"/>
-                    <line x1="15" y1="9" x2="15.01" y2="9"/>
-                </svg>
-            </div>
-            <h4>Fun & Entertainment</h4>
-            <p>Enjoy interactive, engaging, and motivating learning.</p>
-        </div>
+        <a href="game.html" class="why-item">
+    <div class="why-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+        </svg>
+    </div>
+    <h4>Fun & Entertainment</h4>
+    <p>Enjoy interactive, engaging, and motivating learning.</p>
+</a>
 
         <a href="community.html" class="why-item">
             <div class="why-icon">
@@ -661,6 +662,49 @@ We put customers at the center of everything we do.
             </div>
             <h4>Supportive Community</h4>
             <p>Learn with peers, mentors, and a growing tech community.</p>
+        </a>
+
+    </div>
+
+</section>
+<!-- ===========================
+     SPOTLIGHT SHOWCASE
+=========================== -->
+
+<section class="spotlight-section">
+
+    <div class="spotlight-grid">
+
+        <a href="community.html" class="spotlight-card community-spotlight">
+            <div class="spotlight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <div class="spotlight-text">
+                <h3>Join Our Community</h3>
+                <p>Connect with fellow learners and get support along the way.</p>
+                <span class="spotlight-cta">Join Now →</span>
+            </div>
+        </a>
+
+        <a href="game.html" class="spotlight-card game-spotlight">
+            <div class="spotlight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                    <line x1="15" y1="9" x2="15.01" y2="9"/>
+                </svg>
+            </div>
+            <div class="spotlight-text">
+                <h3>Play Today's Word Game</h3>
+                <p>A new tech challenge every day — answer and see what others guessed.</p>
+                <span class="spotlight-cta">Play Now →</span>
+            </div>
         </a>
 
     </div>

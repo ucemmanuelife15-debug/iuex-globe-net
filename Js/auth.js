@@ -90,10 +90,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
 
         if (response.ok) {
-          localStorage.setItem("isLoggedIn", "true");
-          localStorage.setItem("userAccount", JSON.stringify({ fullname: data.fullname, email }));
-          window.location.href = "index.html";
-        } else {
+         localStorage.setItem("isLoggedIn", "true");
+         localStorage.setItem("userAccount", JSON.stringify({
+         fullname: data.fullname,
+         email,
+         isAdmin: data.isAdmin || false,
+         isMainAdmin: data.isMainAdmin || false
+  }));
+  window.location.href = "index.html";
+} else {
           alert(data.message);
           signinButton.disabled = false;
           signinButton.textContent = signinButtonOriginalText;
@@ -110,13 +115,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const welcomeMessage = document.getElementById("welcomeMessage");
   const signOutBtn = document.getElementById("signOutBtn");
 
-  if (welcomeMessage) {
+   if (welcomeMessage) {
     const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
     if (savedAccount) {
       const firstName = savedAccount.fullname.split(" ")[0];
       welcomeMessage.textContent = `Welcome, ${firstName}!`;
     }
   }
+
+  // ===== SHOW ADMIN LINK IF USER IS ADMIN =====
+  const adminLink = document.getElementById("adminLink");
+  if (adminLink) {
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+    if (savedAccount && savedAccount.isAdmin) {
+      adminLink.style.display = "block";
+    }
+  }
+
   if (signOutBtn) {
     signOutBtn.addEventListener("click", () => {
       localStorage.removeItem("isLoggedIn");

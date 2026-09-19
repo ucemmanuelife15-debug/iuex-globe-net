@@ -6,23 +6,28 @@ const crypto = require("crypto");
 const resend = require("../emailConfig");
 
 // Sign Up route
-router.post("/signup", async (req, res) => {
+router.post("/signin", async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { email, password } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already registered" });
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-   // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
+   // Check password against hashed version
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
 
-    // Create new user
-    const newUser = new User({ fullname, email, password: hashedPassword });
-    await newUser.save();
-    res.status(201).json({ message: "Account created successfully" });
+    res.status(200).json({
+      message: "Signed in successfully",
+      fullname: user.fullname,
+      isAdmin: user.isAdmin || false,
+      isMainAdmin: user.isMainAdmin || false,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

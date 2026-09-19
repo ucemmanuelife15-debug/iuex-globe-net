@@ -73,7 +73,27 @@
   }
   button:hover { background: var(--electric-blue); }
 
+  .small-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .edit-btn-q { background: var(--electric-blue); }
+  .edit-btn-q:hover { background: var(--primary-blue); }
+  .delete-btn { background: #e5484d; }
+  .delete-btn:hover { background: #c93c40; }
+  .save-btn { background: var(--bright-green); }
+  .save-btn:hover { background: #1ea854; }
+  .cancel-btn { background: #99a3af; }
+  .cancel-btn:hover { background: #7c8894; }
+
   #loginSection, #panelSection { display: none; }
+
+  .question-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    margin-bottom: 18px;
+  }
 
   .answer-item {
     display: flex;
@@ -85,13 +105,6 @@
   .answer-item:last-child { border-bottom: none; }
   .answer-text { font-size: 14px; color: var(--charcoal); }
   .answer-user { color: #8899aa; font-size: 12px; margin-top: 2px; }
-  .delete-btn {
-    background: #e5484d;
-    padding: 6px 14px;
-    font-size: 13px;
-    border-radius: 6px;
-  }
-  .delete-btn:hover { background: #c93c40; }
 
   .error { color: #e5484d; font-size: 14px; margin-bottom: 10px; }
   .success { color: var(--bright-green); font-size: 14px; margin-bottom: 10px; font-weight: 600; }
@@ -111,8 +124,17 @@
   .posted-by {
     font-size: 13px;
     color: #8899aa;
-    margin-bottom: 14px;
+    margin-bottom: 4px;
   }
+
+  .past-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .past-item:last-child { border-bottom: none; }
+  .past-question { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .past-meta { font-size: 12px; color: #8899aa; margin-bottom: 8px; }
+  .past-actions { display: flex; gap: 8px; }
 </style>
 </head>
 <body>
@@ -150,8 +172,13 @@
 
     <div class="card">
       <h2>Current Question & Answers</h2>
-      <div id="currentQuestion">Loading...</div>
+      <div id="currentQuestionWrap">Loading...</div>
       <div id="answersList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Past Questions</h2>
+      <div id="pastList">Loading...</div>
     </div>
 
   </div>
@@ -160,9 +187,8 @@
 
 <script>
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
-  let adminPassword = "";
+  let currentQuestionData = null;
 
-  // Remember the last name used, so the admin doesn't retype it every time
   document.addEventListener("DOMContentLoaded", () => {
     const savedName = localStorage.getItem("adminPosterName");
     if (savedName) {
@@ -185,10 +211,10 @@
       const data = await res.json();
 
       if (data.success) {
-        adminPassword = password;
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("panelSection").style.display = "block";
         loadTodayQuestion();
+        loadPastQuestions();
       } else {
         errorBox.textContent = "Incorrect password.";
       }
@@ -224,6 +250,7 @@
         document.getElementById("questionInput").value = "";
         document.getElementById("categoryInput").value = "";
         loadTodayQuestion();
+        loadPastQuestions();
       } else {
         msgBox.innerHTML = `<div class="error">${data.message || 'Something went wrong.'}</div>`;
       }
@@ -233,21 +260,19 @@
   }
 
   async function loadTodayQuestion() {
-    const questionBox = document.getElementById("currentQuestion");
+    const wrap = document.getElementById("currentQuestionWrap");
     const answersBox = document.getElementById("answersList");
 
     try {
       const res = await fetch(`${API_BASE}/today`);
       if (!res.ok) {
-        questionBox.textContent = "No question set yet.";
+        wrap.textContent = "No question set yet.";
         answersBox.innerHTML = "";
         return;
       }
       const data = await res.json();
-      questionBox.innerHTML = `
-        <strong>${data.question}</strong> <span style="color:#8899aa;font-size:13px;">(${data.category})</span>
-        <div class="posted-by">Posted by: ${data.postedBy || 'Admin'}</div>
-      `;
+      currentQuestionData = data;
+      renderCurrentQuestion(data);
 
       if (!data.answers || data.answers.length === 0) {
         answersBox.innerHTML = '<p style="color:#8899aa;font-size:14px;margin-top:10px;">No answers yet.</p>';
@@ -260,12 +285,72 @@
             <div class="answer-text">${a.answer}</div>
             <div class="answer-user">${a.username}</div>
           </div>
-          <button class="delete-btn" onclick="deleteAnswer('${data._id}', '${a._id}')">Delete</button>
+          <button class="small-btn delete-btn" onclick="deleteAnswer('${data._id}', '${a._id}')">Delete</button>
         </div>
       `).join("");
 
     } catch (err) {
-      questionBox.textContent = "Could not load question.";
+      wrap.textContent = "Could not load question.";
+    }
+  }
+
+  function renderCurrentQuestion(data) {
+    const wrap = document.getElementById("currentQuestionWrap");
+    wrap.innerHTML = `
+      <div class="posted-by">Posted by: ${data.postedBy || 'Admin'}</div>
+      <strong>${data.question}</strong> <span style="color:#8899aa;font-size:13px;">(${data.category})</span>
+      <div class="question-actions">
+        <button class="small-btn edit-btn-q" onclick="editCurrentQuestion()">Edit Question</button>
+        <button class="small-btn delete-btn" onclick="deleteCurrentQuestion()">Delete Question</button>
+      </div>
+    `;
+  }
+
+  function editCurrentQuestion() {
+    if (!currentQuestionData) return;
+    const wrap = document.getElementById("currentQuestionWrap");
+    wrap.innerHTML = `
+      <label>Question</label>
+      <input type="text" id="editQInput" value="${currentQuestionData.question}">
+      <label>Category</label>
+      <input type="text" id="editCatInput" value="${currentQuestionData.category}">
+      <div class="question-actions">
+        <button class="small-btn save-btn" onclick="saveCurrentQuestion()">Save</button>
+        <button class="small-btn cancel-btn" onclick="renderCurrentQuestion(currentQuestionData)">Cancel</button>
+      </div>
+    `;
+  }
+
+  async function saveCurrentQuestion() {
+    const question = document.getElementById("editQInput").value.trim();
+    const category = document.getElementById("editCatInput").value.trim();
+    if (!question) return;
+
+    try {
+      await fetch(`${API_BASE}/question/${currentQuestionData._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, category })
+      });
+      loadTodayQuestion();
+      loadPastQuestions();
+    } catch (err) {
+      alert("Could not save changes. Try again.");
+    }
+  }
+
+  async function deleteCurrentQuestion() {
+    if (!currentQuestionData) return;
+    if (!confirm("Delete this question and all its answers? This cannot be undone.")) return;
+
+    try {
+      await fetch(`${API_BASE}/question/${currentQuestionData._id}`, {
+        method: "DELETE"
+      });
+      loadTodayQuestion();
+      loadPastQuestions();
+    } catch (err) {
+      alert("Could not delete question. Try again.");
     }
   }
 
@@ -277,6 +362,47 @@
       loadTodayQuestion();
     } catch (err) {
       alert("Could not delete answer. Try again.");
+    }
+  }
+
+  async function loadPastQuestions() {
+    const pastList = document.getElementById("pastList");
+    try {
+      const res = await fetch(`${API_BASE}/all`);
+      const all = await res.json();
+
+      // Skip the most recent one since it's already shown above as "current"
+      const past = all.slice(1);
+
+      if (past.length === 0) {
+        pastList.innerHTML = '<p style="color:#8899aa;font-size:14px;">No past questions yet.</p>';
+        return;
+      }
+
+      pastList.innerHTML = past.map(q => `
+        <div class="past-item">
+          <div class="past-question">${q.question}</div>
+          <div class="past-meta">${q.category} · Posted by ${q.postedBy || 'Admin'} · ${new Date(q.date).toLocaleDateString()} · ${(q.answers || []).length} answer(s)</div>
+          <div class="past-actions">
+            <button class="small-btn delete-btn" onclick="deletePastQuestion('${q._id}')">Delete</button>
+          </div>
+        </div>
+      `).join("");
+
+    } catch (err) {
+      pastList.innerHTML = '<p style="color:#e5484d;font-size:14px;">Could not load past questions.</p>';
+    }
+  }
+
+  async function deletePastQuestion(id) {
+    if (!confirm("Delete this past question and all its answers? This cannot be undone.")) return;
+    try {
+      await fetch(`${API_BASE}/question/${id}`, {
+        method: "DELETE"
+      });
+      loadPastQuestions();
+    } catch (err) {
+      alert("Could not delete question. Try again.");
     }
   }
 </script>

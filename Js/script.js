@@ -85,8 +85,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountSignOut = document.getElementById("accountSignOut");
   const accountName = document.getElementById("accountName");
   const accountEmail = document.getElementById("accountEmail");
+  const adminLink = document.getElementById("adminLink");
 
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  // ===== SHOW ADMIN LINK IF USER IS ADMIN =====
+  if (isLoggedIn && adminLink) {
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+    if (savedAccount && savedAccount.isAdmin) {
+      adminLink.style.display = "block";
+    }
+  }
 
   if (isLoggedIn && navGetStarted) {
     navGetStarted.addEventListener("click", (e) => {

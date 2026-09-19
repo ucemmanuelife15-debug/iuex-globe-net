@@ -2208,3 +2208,102 @@ ul{
   display: inline-block;
   margin-top: 16px;
 }
+/* ===========================
+   SPOTLIGHT SHOWCASE (Community + Game)
+=========================== */
+
+.spotlight-section {
+    width:90%;
+    max-width:1100px;
+    margin:50px auto 100px;
+}
+
+.spotlight-grid {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+}
+
+.spotlight-card {
+    position:relative;
+    background:var(--white);
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:18px;
+    padding:26px 24px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    text-align:left;
+    box-shadow:0 6px 20px rgba(0,0,0,.05);
+    transition:.25s ease;
+}
+
+.spotlight-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,.09);
+    border-color:rgba(0,0,0,.1);
+}
+
+.spotlight-icon{
+    flex-shrink:0;
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.spotlight-icon svg{
+    width:24px;
+    height:24px;
+}
+
+.community-spotlight .spotlight-icon{
+    background:rgba(11,79,156,.1);
+    color:var(--primary-blue);
+}
+
+.game-spotlight .spotlight-icon{
+    background:rgba(34,197,94,.1);
+    color:var(--bright-green);
+}
+
+.spotlight-text{
+    flex:1;
+}
+
+.spotlight-card h3{
+    font-size:1.05rem;
+    color:var(--charcoal);
+    margin-bottom:4px;
+}
+
+.spotlight-card p{
+    font-size:.87rem;
+    line-height:1.5;
+    color:#5a6b7d;
+    margin-bottom:8px;
+}
+
+.spotlight-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-weight:700;
+    font-size:.82rem;
+    transition:.25s ease;
+}
+
+.community-spotlight .spotlight-cta{ color:var(--primary-blue); }
+.game-spotlight .spotlight-cta{ color:var(--bright-green); }
+
+.spotlight-card:hover .spotlight-cta{
+    gap:9px;
+}
+
+@media (max-width: 768px){
+    .spotlight-grid{
+        grid-template-columns:1fr;
+    }
+}
