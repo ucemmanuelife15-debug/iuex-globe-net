@@ -295,9 +295,9 @@
               </div>
               ${isMine ? `
                 <div class="answer-actions">
-                  <button class="small-btn edit-btn" onclick="startEdit('${a._id}', ${JSON.stringify(a.answer)})">Edit</button>
-                  <button class="small-btn delete-btn-small" onclick="deleteMyAnswer('${a._id}')">Delete</button>
-                </div>
+                <button class="small-btn edit-btn" onclick="startEdit('${a._id}')">Edit</button>
+                <button class="small-btn delete-btn-small" onclick="deleteMyAnswer('${a._id}')">Delete</button>
+              </div>
               ` : ""}
             </div>
           `;
@@ -358,14 +358,16 @@
     }
   }
 
-  function startEdit(answerId, currentText) {
-    editingAnswerId = answerId;
-    const item = document.querySelector(`.answer-item[data-answer-id="${answerId}"]`);
-    if (!item) return;
+ function startEdit(answerId) {
+  editingAnswerId = answerId;
+  const item = document.querySelector(`.answer-item[data-answer-id="${answerId}"]`);
+  if (!item) return;
 
-    item.innerHTML = `
-      <div class="edit-box">
-        <textarea id="editInput-${answerId}">${currentText}</textarea>
+  const currentText = item.querySelector(".text").textContent;
+
+  item.innerHTML = `
+    <div class="edit-box">
+      <textarea id="editInput-${answerId}">${currentText}</textarea>
         <div class="edit-box-actions">
           <button class="small-btn save-btn" onclick="saveEdit('${answerId}')">Save</button>
           <button class="small-btn cancel-btn" onclick="cancelEdit()">Cancel</button>

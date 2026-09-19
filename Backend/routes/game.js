@@ -92,4 +92,45 @@ router.post('/create', async (req, res) => {
   }
 });
 
+// GET all questions (for admin history view)
+router.get('/all', async (req, res) => {
+  try {
+    const questions = await GameQuestion.find().sort({ date: -1 });
+    res.json(questions);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// EDIT a question's text/category
+router.put('/question/:id', async (req, res) => {
+  try {
+    const { question, category } = req.body;
+    const updated = await GameQuestion.findByIdAndUpdate(
+      req.params.id,
+      { question, category },
+      { new: true }
+    );
+    if (!updated) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+    res.json({ message: 'Question updated', updated });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// DELETE a question entirely
+router.delete('/question/:id', async (req, res) => {
+  try {
+    const deleted = await GameQuestion.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+    res.json({ message: 'Question deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
 module.exports = router;
