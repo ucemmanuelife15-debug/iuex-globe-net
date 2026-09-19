@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - IUEX Globe.Net</title>
+<title>Game Management - IUEX Globe.Net Admin</title>
 <style>
   :root {
     --primary-blue: #0B4F9C;
@@ -21,9 +21,18 @@
     color: var(--charcoal);
     min-height: 100vh;
   }
+
+  .top-bar { padding: 20px 30px; }
+  .back-link {
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
   .container {
     max-width: 640px;
-    margin: 60px auto;
+    margin: 0 auto 60px;
     padding: 0 20px;
   }
   .card {
@@ -86,7 +95,11 @@
   .cancel-btn { background: #99a3af; }
   .cancel-btn:hover { background: #7c8894; }
 
-  #loginSection, #panelSection { display: none; }
+  .locked-card {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .locked-card p { margin-bottom: 20px; color: #667; }
 
   .question-actions {
     display: flex;
@@ -139,20 +152,24 @@
 </head>
 <body>
 
+<div class="top-bar">
+  <a href="admin-dashboard.html" class="back-link">&larr; Back to Admin Dashboard</a>
+</div>
+
 <div class="container">
 
-  <!-- LOGIN SECTION -->
-  <div id="loginSection" class="card" style="display:block;">
-    <span class="badge">ADMIN ACCESS</span>
-    <h1>Admin Login</h1>
-    <p class="sub">IUEX Globe.Net — Game Admin</p>
-    <div id="loginError" class="error"></div>
-    <input type="password" id="adminPassword" placeholder="Admin password">
-    <button onclick="login()">Log In</button>
+  <!-- Shown if not an admin -->
+  <div id="lockedSection" style="display:none;">
+    <div class="card locked-card">
+      <h1>Access Restricted</h1>
+      <p class="sub">This area is only available to IUEX Globe.Net admins.</p>
+      <a href="index.html" class="back-link">Return to Home</a>
+    </div>
   </div>
 
   <!-- ADMIN PANEL SECTION -->
-  <div id="panelSection">
+  <div id="panelSection" style="display:none;">
+    <span class="badge">GAME MANAGEMENT</span>
 
     <div class="card">
       <h2>Post Today's Question</h2>
@@ -190,38 +207,24 @@
   let currentQuestionData = null;
 
   document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+
+    if (!isLoggedIn || !savedAccount || !savedAccount.isAdmin) {
+      document.getElementById("lockedSection").style.display = "block";
+      return;
+    }
+
+    document.getElementById("panelSection").style.display = "block";
+
     const savedName = localStorage.getItem("adminPosterName");
     if (savedName) {
-      const el = document.getElementById("posterNameInput");
-      if (el) el.value = savedName;
+      document.getElementById("posterNameInput").value = savedName;
     }
+
+    loadTodayQuestion();
+    loadPastQuestions();
   });
-
-  async function login() {
-    const password = document.getElementById("adminPassword").value;
-    const errorBox = document.getElementById("loginError");
-    errorBox.textContent = "";
-
-    try {
-      const res = await fetch(`${API_BASE}/admin-login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        document.getElementById("loginSection").style.display = "none";
-        document.getElementById("panelSection").style.display = "block";
-        loadTodayQuestion();
-        loadPastQuestions();
-      } else {
-        errorBox.textContent = "Incorrect password.";
-      }
-    } catch (err) {
-      errorBox.textContent = "Could not reach server. Try again.";
-    }
-  }
 
   async function createQuestion() {
     const postedBy = document.getElementById("posterNameInput").value.trim() || "Admin";
@@ -371,7 +374,6 @@
       const res = await fetch(`${API_BASE}/all`);
       const all = await res.json();
 
-      // Skip the most recent one since it's already shown above as "current"
       const past = all.slice(1);
 
       if (past.length === 0) {

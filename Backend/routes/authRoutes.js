@@ -146,3 +146,49 @@ router.get("/waitlist-users", async (req, res) => {
   }
 });
 module.exports = router;
+// GET all users (for admin management)
+router.get("/all-users", async (req, res) => {
+  try {
+    const users = await User.find().select("fullname email isAdmin isMainAdmin");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// PROMOTE a user to admin
+router.put("/make-admin/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { isAdmin: true },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "User promoted to admin", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// REMOVE a user's admin status (cannot remove the main admin)
+router.put("/remove-admin/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.isMainAdmin) {
+      return res.status(403).json({ message: "Cannot remove the main admin" });
+    }
+    user.isAdmin = false;
+    await user.save();
+    res.json({ message: "Admin status removed", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+module.exports = router;
