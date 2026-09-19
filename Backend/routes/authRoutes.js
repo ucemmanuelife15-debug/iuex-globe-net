@@ -135,4 +135,14 @@ router.post("/join-waitlist", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+// GET all users who joined a product waitlist (admin use)
+router.get("/waitlist-users", async (req, res) => {
+  try {
+    const users = await User.find({ interestedProducts: { $exists: true, $ne: [] } })
+      .select("fullname email interestedProducts");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 module.exports = router;

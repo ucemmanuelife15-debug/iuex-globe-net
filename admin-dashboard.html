@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - IUEX Globe.Net</title>
+<style>
+  :root {
+    --primary-blue: #0B4F9C;
+    --electric-blue: #12A8F5;
+    --bright-green: #22C55E;
+    --white: #FFFFFF;
+    --light-gray: #F5F7FA;
+    --charcoal: #222831;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--light-gray);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  .top-bar { padding: 20px 30px; }
+  .back-link {
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(11, 79, 156, 0.08);
+    color: var(--primary-blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  h1 { font-size: 28px; margin-bottom: 8px; color: var(--primary-blue); }
+  p.sub { color: #667; font-size: 14px; margin-bottom: 30px; }
+
+  .locked-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .dash-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 26px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    text-decoration: none;
+    color: var(--charcoal);
+    display: block;
+    transition: 0.2s ease;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .dash-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  }
+
+  .dash-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(11, 79, 156, 0.1);
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .dash-icon svg { width: 22px; height: 22px; }
+
+  .dash-card h3 { font-size: 16px; margin-bottom: 6px; }
+  .dash-card p { font-size: 13px; color: #667; line-height: 1.5; }
+
+  .main-only-note {
+    font-size: 12px;
+    color: #8899aa;
+    margin-top: 8px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+</div>
+
+<div class="container">
+
+  <!-- Shown if not an admin -->
+  <div id="lockedSection" style="display:none;">
+    <div class="locked-card">
+      <h1>Access Restricted</h1>
+      <p class="sub">This area is only available to IUEX Globe.Net admins.</p>
+      <a href="index.html" class="back-link">Return to Home</a>
+    </div>
+  </div>
+
+  <!-- Main dashboard -->
+  <div id="dashboardSection" style="display:none;">
+    <span class="badge">ADMIN DASHBOARD</span>
+    <h1>Welcome, <span id="adminName">Admin</span></h1>
+    <p class="sub">Manage the website from one place.</p>
+
+    <div class="grid">
+
+      <a href="admin.html" class="dash-card">
+        <div class="dash-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+        </div>
+        <h3>Game Management</h3>
+        <p>Post the daily challenge, manage answers, and view past questions.</p>
+      </a>
+
+      <a href="admin-waitlist.html" class="dash-card">
+        <div class="dash-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <h3>Product Waitlists</h3>
+        <p>See who's interested in ELink and ERoute ahead of launch.</p>
+      </a>
+
+      <a href="admin-manage.html" class="dash-card" id="manageAdminsCard" style="display:none;">
+        <div class="dash-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Manage Admins</h3>
+        <p>Promote or remove other admins.</p>
+        <div class="main-only-note">Main admin only</div>
+      </a>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+
+    if (!isLoggedIn || !savedAccount || !savedAccount.isAdmin) {
+      document.getElementById("lockedSection").style.display = "block";
+      return;
+    }
+
+    document.getElementById("dashboardSection").style.display = "block";
+    document.getElementById("adminName").textContent = savedAccount.fullname.split(" ")[0];
+
+    if (savedAccount.isMainAdmin) {
+      document.getElementById("manageAdminsCard").style.display = "block";
+    }
+  });
+</script>
+
+</body>
+</html>
