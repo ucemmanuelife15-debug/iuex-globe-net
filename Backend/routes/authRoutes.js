@@ -40,12 +40,15 @@ router.post("/signin", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    res.status(200).json({
-      message: "Signed in successfully",
-      fullname: user.fullname,
-      isAdmin: user.isAdmin || false,
-      isMainAdmin: user.isMainAdmin || false,
-    });
+   res.status(200).json({
+  message: "Signed in successfully",
+  userId: user._id,
+  fullname: user.fullname,
+  isAdmin: user.isAdmin || false,
+  isMainAdmin: user.isMainAdmin || false,
+  username: user.username || "",
+  profilePicture: user.profilePicture || "",
+});
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

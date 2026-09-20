@@ -96,14 +96,17 @@ if (password !== confirmPassword) {
         const data = await response.json();
 
         if (response.ok) {
-         localStorage.setItem("isLoggedIn", "true");
-         localStorage.setItem("userAccount", JSON.stringify({
-         fullname: data.fullname,
-         email,
-         isAdmin: data.isAdmin || false,
-         isMainAdmin: data.isMainAdmin || false
-  }));
-  window.location.href = "index.html";
+ localStorage.setItem("isLoggedIn", "true");
+ localStorage.setItem("userAccount", JSON.stringify({
+ userId: data.userId,
+ fullname: data.fullname,
+ email,
+ isAdmin: data.isAdmin || false,
+ isMainAdmin: data.isMainAdmin || false,
+ username: data.username || "",
+ profilePicture: data.profilePicture || ""
+}));
+window.location.href = "index.html";
 } else {
           alert(data.message);
           signinButton.disabled = false;
