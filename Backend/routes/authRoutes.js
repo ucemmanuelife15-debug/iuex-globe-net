@@ -191,4 +191,49 @@ router.put("/remove-admin/:id", async (req, res) => {
   }
 });
 
+// UPDATE username and/or profile picture
+router.put("/update-profile/:id", async (req, res) => {
+  try {
+    const { username, profilePicture } = req.body;
+    const updateData = {};
+    if (username !== undefined) updateData.username = username;
+    if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
+
+    const user = await User.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({
+      message: "Profile updated",
+      username: user.username,
+      profilePicture: user.profilePicture,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// CHANGE password (requires old password)
+router.put("/change-password/:id", async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 module.exports = router;

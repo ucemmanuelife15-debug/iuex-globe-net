@@ -32,6 +32,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  username: {
+    type: String,
+    default: "",
+  },
+  profilePicture: {
+    type: String,
+    default: "",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

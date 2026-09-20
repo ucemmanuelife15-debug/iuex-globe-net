@@ -23,14 +23,20 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const fullname = document.getElementById("fullname").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const termsChecked = document.getElementById("terms").checked;
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value.trim();
+const confirmPassword = document.getElementById("confirmPassword").value.trim();
+const termsChecked = document.getElementById("terms").checked;
 
-      if (!fullname || !email || !password) {
-        alert("Please fill in all fields.");
-        return;
-      }
+if (!fullname || !email || !password || !confirmPassword) {
+  alert("Please fill in all fields.");
+  return;
+}
+
+if (password !== confirmPassword) {
+  alert("Passwords do not match.");
+  return;
+}
 
       if (!termsChecked) {
         alert("Please agree to the Terms & Conditions to continue.");
