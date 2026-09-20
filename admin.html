@@ -81,10 +81,13 @@
     transition: background 0.2s ease;
   }
   button:hover { background: var(--electric-blue); }
+  button:disabled { background: #aab; cursor: not-allowed; }
 
   .small-btn {
     padding: 8px 16px;
     font-size: 13px;
+    min-width: 110px;
+    text-align: center;
   }
   .edit-btn-q { background: var(--electric-blue); }
   .edit-btn-q:hover { background: var(--primary-blue); }
@@ -148,6 +151,13 @@
   .past-question { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
   .past-meta { font-size: 12px; color: #8899aa; margin-bottom: 8px; }
   .past-actions { display: flex; gap: 8px; }
+
+  .loading-note {
+    text-align: center;
+    padding: 16px 10px;
+    color: #8899aa;
+    font-size: 13px;
+  }
 </style>
 </head>
 <body>
@@ -184,7 +194,7 @@
       <label for="categoryInput">Category</label>
       <input type="text" id="categoryInput" placeholder="Optional, default: Tech">
 
-      <button onclick="createQuestion()">Post Question</button>
+      <button id="postBtn" onclick="createQuestion()">Post Question</button>
     </div>
 
     <div class="card">
@@ -231,6 +241,7 @@
     const question = document.getElementById("questionInput").value.trim();
     const category = document.getElementById("categoryInput").value.trim() || "Tech";
     const msgBox = document.getElementById("createMsg");
+    const postBtn = document.getElementById("postBtn");
     msgBox.innerHTML = "";
 
     if (!question) {
@@ -239,6 +250,9 @@
     }
 
     localStorage.setItem("adminPosterName", postedBy);
+
+    postBtn.disabled = true;
+    postBtn.textContent = "Please wait...";
 
     try {
       const res = await fetch(`${API_BASE}/create`, {
@@ -259,12 +273,16 @@
       }
     } catch (err) {
       msgBox.innerHTML = '<div class="error">Could not reach server.</div>';
+    } finally {
+      postBtn.disabled = false;
+      postBtn.textContent = "Post Question";
     }
   }
 
   async function loadTodayQuestion() {
     const wrap = document.getElementById("currentQuestionWrap");
     const answersBox = document.getElementById("answersList");
+    wrap.innerHTML = '<div class="loading-note">Loading... (first load after inactivity can take up to a minute)</div>';
 
     try {
       const res = await fetch(`${API_BASE}/today`);
@@ -288,7 +306,7 @@
             <div class="answer-text">${a.answer}</div>
             <div class="answer-user">${a.username}</div>
           </div>
-          <button class="small-btn delete-btn" onclick="deleteAnswer('${data._id}', '${a._id}')">Delete</button>
+          <button class="small-btn delete-btn" id="del-${a._id}" onclick="deleteAnswer('${data._id}', '${a._id}')">Delete</button>
         </div>
       `).join("");
 
@@ -304,7 +322,7 @@
       <strong>${data.question}</strong> <span style="color:#8899aa;font-size:13px;">(${data.category})</span>
       <div class="question-actions">
         <button class="small-btn edit-btn-q" onclick="editCurrentQuestion()">Edit Question</button>
-        <button class="small-btn delete-btn" onclick="deleteCurrentQuestion()">Delete Question</button>
+        <button class="small-btn delete-btn" id="deleteQBtn" onclick="deleteCurrentQuestion()">Delete Question</button>
       </div>
     `;
   }
@@ -318,7 +336,7 @@
       <label>Category</label>
       <input type="text" id="editCatInput" value="${currentQuestionData.category}">
       <div class="question-actions">
-        <button class="small-btn save-btn" onclick="saveCurrentQuestion()">Save</button>
+        <button class="small-btn save-btn" id="saveQBtn" onclick="saveCurrentQuestion()">Save</button>
         <button class="small-btn cancel-btn" onclick="renderCurrentQuestion(currentQuestionData)">Cancel</button>
       </div>
     `;
@@ -327,7 +345,13 @@
   async function saveCurrentQuestion() {
     const question = document.getElementById("editQInput").value.trim();
     const category = document.getElementById("editCatInput").value.trim();
+    const saveBtn = document.getElementById("saveQBtn");
     if (!question) return;
+
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Please wait...";
+    }
 
     try {
       await fetch(`${API_BASE}/question/${currentQuestionData._id}`, {
@@ -339,12 +363,22 @@
       loadPastQuestions();
     } catch (err) {
       alert("Could not save changes. Try again.");
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save";
+      }
     }
   }
 
   async function deleteCurrentQuestion() {
     if (!currentQuestionData) return;
     if (!confirm("Delete this question and all its answers? This cannot be undone.")) return;
+
+    const deleteQBtn = document.getElementById("deleteQBtn");
+    if (deleteQBtn) {
+      deleteQBtn.disabled = true;
+      deleteQBtn.textContent = "Please wait...";
+    }
 
     try {
       await fetch(`${API_BASE}/question/${currentQuestionData._id}`, {
@@ -354,10 +388,19 @@
       loadPastQuestions();
     } catch (err) {
       alert("Could not delete question. Try again.");
+      if (deleteQBtn) {
+        deleteQBtn.disabled = false;
+        deleteQBtn.textContent = "Delete Question";
+      }
     }
   }
 
   async function deleteAnswer(questionId, answerId) {
+    const btn = document.getElementById(`del-${answerId}`);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Please wait...";
+    }
     try {
       await fetch(`${API_BASE}/answer/${questionId}/${answerId}`, {
         method: "DELETE"
@@ -365,11 +408,16 @@
       loadTodayQuestion();
     } catch (err) {
       alert("Could not delete answer. Try again.");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Delete";
+      }
     }
   }
 
   async function loadPastQuestions() {
     const pastList = document.getElementById("pastList");
+    pastList.innerHTML = '<div class="loading-note">Loading...</div>';
     try {
       const res = await fetch(`${API_BASE}/all`);
       const all = await res.json();
@@ -386,7 +434,7 @@
           <div class="past-question">${q.question}</div>
           <div class="past-meta">${q.category} · Posted by ${q.postedBy || 'Admin'} · ${new Date(q.date).toLocaleDateString()} · ${(q.answers || []).length} answer(s)</div>
           <div class="past-actions">
-            <button class="small-btn delete-btn" onclick="deletePastQuestion('${q._id}')">Delete</button>
+            <button class="small-btn delete-btn" id="delpast-${q._id}" onclick="deletePastQuestion('${q._id}')">Delete</button>
           </div>
         </div>
       `).join("");
@@ -398,6 +446,11 @@
 
   async function deletePastQuestion(id) {
     if (!confirm("Delete this past question and all its answers? This cannot be undone.")) return;
+    const btn = document.getElementById(`delpast-${id}`);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Please wait...";
+    }
     try {
       await fetch(`${API_BASE}/question/${id}`, {
         method: "DELETE"
@@ -405,6 +458,10 @@
       loadPastQuestions();
     } catch (err) {
       alert("Could not delete question. Try again.");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Delete";
+      }
     }
   }
 </script>

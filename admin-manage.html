@@ -84,6 +84,7 @@
     cursor: pointer;
   }
   button:hover { background: var(--electric-blue); }
+  button:disabled { background: #aab; cursor: not-allowed; }
 
   .error { color: #e5484d; font-size: 14px; margin-bottom: 10px; }
   .success { color: var(--bright-green); font-size: 14px; margin-bottom: 10px; font-weight: 600; }
@@ -116,6 +117,8 @@
   .small-btn {
     padding: 8px 16px;
     font-size: 13px;
+    min-width: 118px;
+    text-align: center;
   }
   .promote-btn { background: var(--bright-green); }
   .promote-btn:hover { background: #1ea854; }
@@ -127,6 +130,13 @@
     padding: 30px 10px;
     color: #8899aa;
     font-size: 14px;
+  }
+
+  .loading-note {
+    text-align: center;
+    padding: 20px 10px;
+    color: #8899aa;
+    font-size: 13px;
   }
 </style>
 </head>
@@ -145,8 +155,8 @@
       <h1>Manage Admins</h1>
       <p class="sub">Enter the admin password to continue.</p>
       <div id="loginError" class="error"></div>
-      <input type="password" id="adminPassword" placeholder="Admin password">
-      <button onclick="unlock()">Unlock</button>
+      <input type="password" id="adminPassword" placeholder="Admin password" readonly onfocus="this.removeAttribute('readonly')">
+      <button id="unlockBtn" onclick="unlock()">Unlock</button>
     </div>
   </div>
 
@@ -166,7 +176,7 @@
     <p class="sub">Promote users to admin, or remove admin access.</p>
 
     <div class="card">
-      <input type="text" class="search-input" id="searchInput" placeholder="Search by name or email..." oninput="renderList()">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search by name or email..." oninput="renderList()" readonly onfocus="this.removeAttribute('readonly')">
     </div>
 
     <div class="card">
@@ -194,7 +204,11 @@
   async function unlock() {
     const password = document.getElementById("adminPassword").value;
     const errorBox = document.getElementById("loginError");
+    const unlockBtn = document.getElementById("unlockBtn");
     errorBox.textContent = "";
+
+    unlockBtn.disabled = true;
+    unlockBtn.textContent = "Please wait...";
 
     try {
       const res = await fetch(`${API_BASE}/admin-login`, {
@@ -207,17 +221,23 @@
       if (data.success) {
         document.getElementById("lockedSection").style.display = "none";
         document.getElementById("panelSection").style.display = "block";
+        document.getElementById("searchInput").value = "";
         loadUsers();
       } else {
         errorBox.textContent = "Incorrect password.";
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "Unlock";
       }
     } catch (err) {
       errorBox.textContent = "Could not reach server. Try again.";
+      unlockBtn.disabled = false;
+      unlockBtn.textContent = "Unlock";
     }
   }
 
   async function loadUsers() {
     const userList = document.getElementById("userList");
+    userList.innerHTML = '<div class="loading-note">Loading users... (first load after inactivity can take up to a minute)</div>';
     try {
       const res = await fetch(`${AUTH_BASE}/all-users`);
       allUsers = await res.json();
@@ -253,9 +273,9 @@
       if (u.isMainAdmin) {
         actionBtn = "";
       } else if (u.isAdmin) {
-        actionBtn = `<button class="small-btn remove-btn" onclick="removeAdmin('${u._id}')">Remove Admin</button>`;
+        actionBtn = `<button class="small-btn remove-btn" id="btn-${u._id}" onclick="removeAdmin('${u._id}')">Remove Admin</button>`;
       } else {
-        actionBtn = `<button class="small-btn promote-btn" onclick="makeAdmin('${u._id}')">Make Admin</button>`;
+        actionBtn = `<button class="small-btn promote-btn" id="btn-${u._id}" onclick="makeAdmin('${u._id}')">Make Admin</button>`;
       }
 
       return `
@@ -271,26 +291,48 @@
   }
 
   async function makeAdmin(id) {
+    const btn = document.getElementById(`btn-${id}`);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Please wait...";
+    }
     try {
       await fetch(`${AUTH_BASE}/make-admin/${id}`, { method: "PUT" });
       loadUsers();
     } catch (err) {
       alert("Could not promote user. Try again.");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Make Admin";
+      }
     }
   }
 
   async function removeAdmin(id) {
     if (!confirm("Remove this user's admin access?")) return;
+    const btn = document.getElementById(`btn-${id}`);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Please wait...";
+    }
     try {
       const res = await fetch(`${AUTH_BASE}/remove-admin/${id}`, { method: "PUT" });
       const data = await res.json();
       if (!res.ok) {
         alert(data.message || "Could not remove admin access.");
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Remove Admin";
+        }
         return;
       }
       loadUsers();
     } catch (err) {
       alert("Could not remove admin access. Try again.");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Remove Admin";
+      }
     }
   }
 </script>

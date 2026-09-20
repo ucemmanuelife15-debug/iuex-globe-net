@@ -132,6 +132,13 @@
     color: #8899aa;
     font-size: 14px;
   }
+
+  .loading-note {
+    text-align: center;
+    padding: 20px 10px;
+    color: #8899aa;
+    font-size: 13px;
+  }
 </style>
 </head>
 <body>
@@ -165,7 +172,9 @@
         <h2 id="listTitle">ELink Waitlist</h2>
         <span class="count-pill" id="listCount">0</span>
       </div>
-      <div id="userList">Loading...</div>
+      <div id="userList">
+        <div class="loading-note">Loading... (first load after inactivity can take up to a minute)</div>
+      </div>
     </div>
   </div>
 
@@ -175,6 +184,7 @@
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/auth";
   let allUsers = [];
   let currentTab = "elink";
+  let hasLoaded = false;
 
   document.addEventListener("DOMContentLoaded", () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -194,6 +204,7 @@
     try {
       const res = await fetch(`${API_BASE}/waitlist-users`);
       allUsers = await res.json();
+      hasLoaded = true;
       renderList();
     } catch (err) {
       userList.innerHTML = '<div class="empty-state">Could not load waitlist data.</div>';
@@ -206,6 +217,12 @@
     document.getElementById("tabEroute").classList.toggle("active", product === "eroute");
     document.getElementById("listTitle").textContent =
       (product === "elink" ? "ELink" : "ERoute") + " Waitlist";
+
+    if (!hasLoaded) {
+      document.getElementById("userList").innerHTML =
+        '<div class="loading-note">Loading... (first load after inactivity can take up to a minute)</div>';
+      return;
+    }
     renderList();
   }
 
