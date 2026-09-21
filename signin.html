@@ -24,14 +24,11 @@
 
             <form class="signin-form auth-form">
 
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
+                               <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 
-                                <label for="password">Password</label>
-                <div class="password-field">
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                    <span class="toggle-password" id="togglePassword">👁</span>
-                </div>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 
                 <p class="forgot-password-link"><a href="forgot-password.html">Forgot Password?</a></p>
 

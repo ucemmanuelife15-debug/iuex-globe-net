@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Settings - IUEX Globe.Net</title>
+<style>
+  :root {
+    --primary-blue: #0B4F9C;
+    --electric-blue: #12A8F5;
+    --bright-green: #22C55E;
+    --white: #FFFFFF;
+    --light-gray: #F5F7FA;
+    --charcoal: #222831;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--light-gray);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  .top-bar { padding: 20px 30px; }
+  .back-link {
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .container {
+    max-width: 560px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(11, 79, 156, 0.08);
+    color: var(--primary-blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  h1 { font-size: 26px; margin-bottom: 8px; color: var(--primary-blue); }
+  p.sub { color: #667; font-size: 14px; margin-bottom: 30px; }
+
+  .locked-card { text-align: center; padding: 40px 20px; }
+  .locked-card p { margin-bottom: 20px; color: #667; }
+
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+  .card h2 { font-size: 16px; margin-bottom: 6px; color: var(--primary-blue); }
+  .card p.hint { font-size: 13px; color: #8899aa; margin-bottom: 18px; }
+
+  /* Profile picture */
+  .avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .avatar-circle {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    border: 2px dashed #c9d2de;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .avatar-plus {
+    font-size: 26px;
+    color: #99a3af;
+    font-weight: 300;
+  }
+  .avatar-actions { display: flex; flex-direction: column; gap: 8px; }
+  .avatar-actions button { width: fit-content; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  label:first-of-type { margin-top: 0; }
+
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d0d7e2;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  input:focus { outline: none; border-color: var(--electric-blue); }
+  input:disabled { background: #f0f2f5; color: #99a3af; }
+
+  button {
+    background: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  button:hover { background: var(--electric-blue); }
+  button:disabled { background: #aab; cursor: not-allowed; }
+
+  .small-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    margin-top: 0;
+    background: #99a3af;
+  }
+  .small-btn:hover { background: #7c8894; }
+
+  .error { color: #e5484d; font-size: 13px; margin-top: 8px; }
+  .success { color: var(--bright-green); font-size: 13px; margin-top: 8px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+</div>
+
+<div class="container">
+
+  <div id="lockedSection" style="display:none;">
+    <div class="card locked-card">
+      <h1>Please Sign In</h1>
+      <p class="sub">You need to be signed in to view Profile Settings.</p>
+      <a href="signin.html" class="back-link">Go to Sign In</a>
+    </div>
+  </div>
+
+  <div id="panelSection" style="display:none;">
+    <span class="badge">PROFILE SETTINGS</span>
+    <h1>Your Profile</h1>
+    <p class="sub">Update how you appear on IUEX Globe.Net.</p>
+
+    <!-- Profile Picture -->
+    <div class="card">
+      <h2>Profile Picture</h2>
+      <p class="hint">Optional — add a photo, or leave the default icon.</p>
+      <div class="avatar-row">
+        <div class="avatar-circle" onclick="document.getElementById('pictureInput').click()">
+          <span class="avatar-plus" id="avatarPlus">+</span>
+          <img id="avatarImg" style="display:none;">
+        </div>
+        <div class="avatar-actions">
+          <button class="small-btn" id="choosePhotoBtn" onclick="document.getElementById('pictureInput').click()">Choose Photo</button>
+          <button class="small-btn" id="removePicBtn" onclick="removePicture()" style="display:none;">Remove Photo</button>
+        </div>
+      </div>
+      <input type="file" id="pictureInput" accept="image/*" style="display:none;" onchange="handlePictureSelect(event)">
+      <div id="pictureMsg"></div>
+    </div>
+
+    <!-- Username -->
+    <div class="card">
+      <h2>Username</h2>
+      <p class="hint">Optional — if set, this replaces your first name in the homepage greeting.</p>
+      <label for="usernameInput">Username</label>
+      <input type="text" id="usernameInput" placeholder="e.g. joy_codes" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+      <div id="usernameMsg"></div>
+      <button id="saveUsernameBtn" onclick="saveUsername()">Save Username</button>
+    </div>
+
+    <!-- Change Password -->
+    <div class="card">
+      <h2>Change Password</h2>
+      <p class="hint">Enter your current password, then choose a new one.</p>
+
+      <label for="oldPasswordInput">Current Password</label>
+      <input type="password" id="oldPasswordInput" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+
+      <label for="newPasswordInput">New Password</label>
+      <input type="password" id="newPasswordInput" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+
+      <label for="confirmNewPasswordInput">Confirm New Password</label>
+      <input type="password" id="confirmNewPasswordInput" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+
+      <div id="passwordMsg"></div>
+      <button id="savePasswordBtn" onclick="changePassword()">Update Password</button>
+    </div>
+
+    <!-- Email (locked) -->
+    <div class="card">
+      <h2>Email Address</h2>
+      <p class="hint">Your email is tied to your account and can't be changed.</p>
+      <input type="text" id="emailDisplay" disabled>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const AUTH_BASE = "https://iuex-globe-net-backend.onrender.com/api/auth";
+  let currentAccount = null;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    currentAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+
+    if (!isLoggedIn || !currentAccount) {
+      document.getElementById("lockedSection").style.display = "block";
+      return;
+    }
+
+    document.getElementById("panelSection").style.display = "block";
+    document.getElementById("emailDisplay").value = currentAccount.email;
+
+    document.getElementById("usernameInput").value = "";
+    setTimeout(() => {
+      document.getElementById("usernameInput").value = currentAccount.username || "";
+    }, 50);
+
+    if (currentAccount.profilePicture) {
+      showPicturePreview(currentAccount.profilePicture);
+    }
+  });
+
+  function showPicturePreview(base64) {
+    document.getElementById("avatarImg").src = base64;
+    document.getElementById("avatarImg").style.display = "block";
+    document.getElementById("avatarPlus").style.display = "none";
+    document.getElementById("removePicBtn").style.display = "inline-block";
+  }
+
+  function handlePictureSelect(event) {
+    const file = event.target.files[0];
+    const msgBox = document.getElementById("pictureMsg");
+    msgBox.innerHTML = "";
+
+    if (!file) return;
+
+    if (file.size > 1.5 * 1024 * 1024) {
+  msgBox.innerHTML = '<div class="error">Please choose an image smaller than 1.5MB.</div>';
+  return;
+}
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      await savePicture(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function savePicture(base64) {
+    const msgBox = document.getElementById("pictureMsg");
+    const chooseBtn = document.getElementById("choosePhotoBtn");
+    msgBox.innerHTML = '';
+    chooseBtn.disabled = true;
+    chooseBtn.textContent = "Please wait...";
+
+    try {
+      const res = await fetch(`${AUTH_BASE}/update-profile/${currentAccount.userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profilePicture: base64 })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        currentAccount.profilePicture = data.profilePicture;
+        localStorage.setItem("userAccount", JSON.stringify(currentAccount));
+        showPicturePreview(currentAccount.profilePicture);
+        msgBox.innerHTML = '<div class="success">Photo updated!</div>';
+      } else {
+        msgBox.innerHTML = `<div class="error">${data.message || 'Could not save photo.'}</div>`;
+      }
+    } catch (err) {
+      msgBox.innerHTML = '<div class="error">Could not reach server.</div>';
+    } finally {
+      chooseBtn.disabled = false;
+      chooseBtn.textContent = "Choose Photo";
+    }
+  }
+
+  async function removePicture() {
+    const msgBox = document.getElementById("pictureMsg");
+    const removeBtn = document.getElementById("removePicBtn");
+    msgBox.innerHTML = '';
+    removeBtn.disabled = true;
+    removeBtn.textContent = "Please wait...";
+
+    try {
+      const res = await fetch(`${AUTH_BASE}/update-profile/${currentAccount.userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profilePicture: "" })
+      });
+
+      if (res.ok) {
+        currentAccount.profilePicture = "";
+        localStorage.setItem("userAccount", JSON.stringify(currentAccount));
+        document.getElementById("avatarImg").style.display = "none";
+        document.getElementById("avatarPlus").style.display = "block";
+        removeBtn.style.display = "none";
+        msgBox.innerHTML = '<div class="success">Photo removed.</div>';
+      } else {
+        msgBox.innerHTML = '<div class="error">Could not remove photo.</div>';
+      }
+    } catch (err) {
+      msgBox.innerHTML = '<div class="error">Could not reach server.</div>';
+    } finally {
+      removeBtn.disabled = false;
+      removeBtn.textContent = "Remove Photo";
+    }
+  }
+
+  async function saveUsername() {
+    const username = document.getElementById("usernameInput").value.trim();
+    const msgBox = document.getElementById("usernameMsg");
+    const btn = document.getElementById("saveUsernameBtn");
+    msgBox.innerHTML = "";
+
+    btn.disabled = true;
+    btn.textContent = "Please wait...";
+
+    try {
+      const res = await fetch(`${AUTH_BASE}/update-profile/${currentAccount.userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        currentAccount.username = data.username;
+        localStorage.setItem("userAccount", JSON.stringify(currentAccount));
+        msgBox.innerHTML = '<div class="success">Username saved!</div>';
+      } else {
+        msgBox.innerHTML = `<div class="error">${data.message || 'Could not save username.'}</div>`;
+      }
+    } catch (err) {
+      msgBox.innerHTML = '<div class="error">Could not reach server.</div>';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Username";
+    }
+  }
+
+  async function changePassword() {
+    const oldPassword = document.getElementById("oldPasswordInput").value.trim();
+    const newPassword = document.getElementById("newPasswordInput").value.trim();
+    const confirmNewPassword = document.getElementById("confirmNewPasswordInput").value.trim();
+    const msgBox = document.getElementById("passwordMsg");
+    const btn = document.getElementById("savePasswordBtn");
+    msgBox.innerHTML = "";
+
+    if (!oldPassword || !newPassword || !confirmNewPassword) {
+      msgBox.innerHTML = '<div class="error">Please fill in all password fields.</div>';
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      msgBox.innerHTML = '<div class="error">New passwords do not match.</div>';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Please wait...";
+
+    try {
+      const res = await fetch(`${AUTH_BASE}/change-password/${currentAccount.userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ oldPassword, newPassword })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        msgBox.innerHTML = '<div class="success">Password updated successfully!</div>';
+        document.getElementById("oldPasswordInput").value = "";
+        document.getElementById("newPasswordInput").value = "";
+        document.getElementById("confirmNewPasswordInput").value = "";
+      } else {
+        msgBox.innerHTML = `<div class="error">${data.message || 'Could not update password.'}</div>`;
+      }
+    } catch (err) {
+      msgBox.innerHTML = '<div class="error">Could not reach server.</div>';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Update Password";
+    }
+  }
+</script>
+
+</body>
+</html>
