@@ -71,8 +71,7 @@ router.post("/forgot-password", async (req, res) => {
     user.resetTokenExpiry = resetTokenExpiry;
     await user.save();
 
-    const resetLink = `http://127.0.0.1:5500/reset-password.html?token=${resetToken}`;
-
+       const resetLink = `https://iuexglobe.netlify.app/reset-password.html?token=${resetToken}`;
     await resend.emails.send({
       from: "IUEX Globe.Net <onboarding@resend.dev>",
       to: user.email,
