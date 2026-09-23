@@ -250,3 +250,18 @@ window.location.href = "index.html";
     });
   }
 });
+document.querySelectorAll(".password-toggle").forEach(button => {
+    button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+
+        if (input.type === "password") {
+            input.type = "text";
+            button.textContent = "🙈";
+            button.setAttribute("aria-label", "Hide password");
+        } else {
+            input.type = "password";
+            button.textContent = "👁️";
+            button.setAttribute("aria-label", "Show password");
+        }
+    });
+});

@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <style>
+    .password-field {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-field input {
+        width: 100%;
+        padding-right: 45px;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #222831;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 5px;
+        line-height: 1;
+        margin-top: 0;
+    }
+
+    .password-toggle:hover {
+        background: transparent;
+        color: #222831;
+    }
+</style>
 </head>
 <body class="page-elink-signup">
 
@@ -29,10 +60,18 @@
                 <label for="email">Email Address</label>
                 <input type="email" id="email" placeholder="Enter your email" required>
 
-                <label for="password">Password</label>
-                <div class="password-field">
-                    <input type="password" id="password" placeholder="Create a password" required>
-                </div>
+               <label for="password">Password</label>
+<div class="password-field">
+    <input type="password" id="password" placeholder="Create a password" required>
+
+    <button
+        type="button"
+        class="password-toggle"
+        id="togglePassword"
+        aria-label="Show password">
+        👁️
+    </button>
+</div>
 
                 <div class="auth-terms">
                     <input type="checkbox" id="terms" required>
@@ -55,12 +94,18 @@
 
     <script>
       const togglePassword = document.getElementById("togglePassword");
-      const passwordInput = document.getElementById("password");
-      togglePassword.addEventListener("click", () => {
-        const isHidden = passwordInput.type === "password";
-        passwordInput.type = isHidden ? "text" : "password";
-        togglePassword.textContent = isHidden ? "🙈" : "👁";
-      });
+const passwordInput = document.getElementById("password");
+
+togglePassword.addEventListener("click", () => {
+  const isHidden = passwordInput.type === "password";
+
+  passwordInput.type = isHidden ? "text" : "password";
+  togglePassword.textContent = isHidden ? "🙈" : "👁️";
+  togglePassword.setAttribute(
+    "aria-label",
+    isHidden ? "Hide password" : "Show password"
+  );
+});
 
       const waitlistForm = document.getElementById("waitlistForm");
       const waitlistBtn = document.getElementById("waitlistBtn");

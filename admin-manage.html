@@ -139,6 +139,35 @@
     color: #8899aa;
     font-size: 13px;
   }
+  .password-field {
+    position: relative;
+    width: 100%;
+}
+
+.password-field input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #222831;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    line-height: 1;
+    margin-top: 0;
+}
+
+.password-toggle:hover {
+    background: transparent;
+    color: #222831;
+}
 </style>
 </head>
 <body class="page-admin-manage">
@@ -156,7 +185,17 @@
       <h1>Manage Admins</h1>
       <p class="sub">Enter the admin password to continue.</p>
       <div id="loginError" class="error"></div>
-      <input type="password" id="adminPassword" placeholder="Admin password" readonly onfocus="this.removeAttribute('readonly')">
+     <div class="password-field">
+    <input type="password" id="adminPassword" placeholder="Admin password" readonly onfocus="this.removeAttribute('readonly')">
+
+    <button
+        type="button"
+        class="password-toggle"
+        id="toggleAdminPassword"
+        aria-label="Show password">
+        👁️
+    </button>
+</div>
       <button id="unlockBtn" onclick="unlock()">Unlock</button>
     </div>
   </div>
@@ -188,6 +227,19 @@
 </div>
 
 <script>
+  const toggleAdminPassword = document.getElementById("toggleAdminPassword");
+const adminPasswordInput = document.getElementById("adminPassword");
+
+toggleAdminPassword.addEventListener("click", () => {
+    const isHidden = adminPasswordInput.type === "password";
+
+    adminPasswordInput.type = isHidden ? "text" : "password";
+    toggleAdminPassword.textContent = isHidden ? "🙈" : "👁️";
+    toggleAdminPassword.setAttribute(
+        "aria-label",
+        isHidden ? "Hide password" : "Show password"
+    );
+});
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
   const AUTH_BASE = "https://iuex-globe-net-backend.onrender.com/api/auth";
   let allUsers = [];

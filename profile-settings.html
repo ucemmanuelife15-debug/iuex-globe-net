@@ -143,6 +143,35 @@
 
   .error { color: #e5484d; font-size: 13px; margin-top: 8px; }
   .success { color: var(--bright-green); font-size: 13px; margin-top: 8px; font-weight: 600; }
+  .password-field {
+    position: relative;
+    width: 100%;
+}
+
+.password-field input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #222831;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    line-height: 1;
+    margin-top: 0;
+}
+
+.password-toggle:hover {
+    background: transparent;
+    color: #222831;
+}
 </style>
 </head>
 <body class="page-profile">
@@ -203,14 +232,29 @@
       <h2>Change Password</h2>
       <p class="hint">Enter your current password, then choose a new one.</p>
 
-      <label for="oldPasswordInput">Current Password</label>
-      <input type="password" id="oldPasswordInput" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+    <label for="oldPasswordInput">Current Password</label>
+<div class="password-field">
+    <input type="password" id="oldPasswordInput" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+    <button type="button" class="password-toggle" data-target="oldPasswordInput" aria-label="Show password">
+        👁️
+    </button>
+</div>
 
-      <label for="newPasswordInput">New Password</label>
-      <input type="password" id="newPasswordInput" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+<label for="newPasswordInput">New Password</label>
+<div class="password-field">
+    <input type="password" id="newPasswordInput" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+    <button type="button" class="password-toggle" data-target="newPasswordInput" aria-label="Show password">
+        👁️
+    </button>
+</div>
 
-      <label for="confirmNewPasswordInput">Confirm New Password</label>
-      <input type="password" id="confirmNewPasswordInput" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+<label for="confirmNewPasswordInput">Confirm New Password</label>
+<div class="password-field">
+    <input type="password" id="confirmNewPasswordInput" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
+    <button type="button" class="password-toggle" data-target="confirmNewPasswordInput" aria-label="Show password">
+        👁️
+    </button>
+</div>
 
       <div id="passwordMsg"></div>
       <button id="savePasswordBtn" onclick="changePassword()">Update Password</button>
@@ -437,6 +481,21 @@ function closePhotoModal() {
       btn.textContent = "Update Password";
     }
   }
+  document.querySelectorAll(".password-toggle").forEach(button => {
+    button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+
+        if (input.type === "password") {
+            input.type = "text";
+            button.textContent = "🙈";
+            button.setAttribute("aria-label", "Hide password");
+        } else {
+            input.type = "password";
+            button.textContent = "👁️";
+            button.setAttribute("aria-label", "Show password");
+        }
+    });
+});
 </script>
 
 </body>
