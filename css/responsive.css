@@ -53,19 +53,45 @@
     }
 
     .hamburger{
-        display:flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 5px;
-        width: 30px;
-    }
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    width: 18px;
+}
 
-    .hamburger span {
-        width: 100%;
-        height: 3px;
-        background: #12233d;
-        border-radius: 2px;
-    }
+.hamburger span {
+    width: 100%;
+    height: 2px;
+    background: #12233d;
+    border-radius: 2px;
+}
+
+.mobile-nav-cluster{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.mobile-profile-icon.logged-in{
+    display: flex;
+    align-items: center;
+    color: var(--primary-blue, #0B4F9C);
+}
+.mobile-profile-icon img{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.mobile-profile-icon::after{
+    content: "▾";
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-blue, #0B4F9C);
+}
     .hero{
         flex-direction:column;
         text-align:center;
@@ -298,6 +324,22 @@
         padding: 16px;
     }
 }
+@media (max-width:768px){
+    .nav-actions .nav-profile{
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+    }
+    .nav-actions .nav-profile img{
+        width: 22px;
+        height: 22px;
+    }
+    .nav-actions .nav-profile span{
+        display: inline;
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+}
 @media (max-width:400px){
     .ticker-item{
         font-size: 14px;
@@ -308,4 +350,106 @@
         width: 18px;
         height: 18px;
     }
+}
+@media (max-width:295px){
+    .navbar{
+        flex-wrap: nowrap;
+    }
+    .logo-text h2{
+        font-size: 0.95rem;
+    }
+    .logo-text p{
+        font-size: 0.6rem;
+    }
+    .logo img{
+        width: 50px;
+        height: 50px;
+    }
+    .mobile-profile-icon{
+        margin-right: 5px;
+        flex-shrink: 0;
+    }
+    .mobile-profile-icon img{
+        width: 20px;
+        height: 20px;
+    }
+    .hamburger{
+        flex-shrink: 0;
+        width: 16px;
+        margin-top: 5px;
+    }
+}
+@media (max-width:295px){
+    .mobile-nav-cluster{
+        flex-direction: column;
+        gap: 3px;
+        width: 22px;
+    }
+    .mobile-profile-icon.logged-in{
+        width: 100%;
+    }
+    .mobile-nav-cluster .hamburger{
+        width: 100%;
+    }
+}
+/* ===========================
+   STANDALONE PAGES — MOBILE FIXES
+=========================== */
+
+@media (max-width: 480px){
+
+    /* Shared safety net for all standalone pages */
+    .page-admin, .page-admin-dashboard, .page-admin-manage,
+    .page-admin-waitlist, .page-game, .page-profile, .page-community,
+    .page-courses{
+        overflow-x: hidden;
+    }
+
+    /* Admin — Game Management */
+    .page-admin .container{ padding: 0 14px; }
+    .page-admin .card{ padding: 20px 16px; }
+    .page-admin h1{ font-size: 20px; }
+    .page-admin .answer-item{ flex-direction: column; align-items: flex-start; gap: 8px; }
+    .page-admin .past-item .past-actions{ margin-top: 8px; }
+
+    /* Admin Dashboard */
+    .page-admin-dashboard .container{ padding: 0 14px; }
+    .page-admin-dashboard .grid{ grid-template-columns: 1fr; }
+    .page-admin-dashboard h1{ font-size: 20px; }
+
+    /* Manage Admins */
+    .page-admin-manage .container{ padding: 0 14px; }
+    .page-admin-manage .card{ padding: 20px 16px; }
+    .page-admin-manage h1{ font-size: 20px; }
+    .page-admin-manage .user-row{ flex-direction: column; align-items: flex-start; gap: 8px; }
+
+    /* Waitlist */
+    .page-admin-waitlist .container{ padding: 0 14px; }
+    .page-admin-waitlist .card{ padding: 20px 16px; }
+    .page-admin-waitlist h1{ font-size: 20px; }
+    .page-admin-waitlist .user-row{ flex-direction: column; align-items: flex-start; gap: 8px; }
+    .page-admin-waitlist .tabs{ flex-wrap: wrap; }
+
+    /* Game */
+    .page-game .container{ padding: 0 14px; }
+    .page-game .card{ padding: 20px 16px; }
+    .page-game h1{ font-size: 22px; }
+    .page-game .answer-item{ flex-direction: column; align-items: flex-start; gap: 6px; }
+    .page-game .answer-actions{ margin-top: 6px; }
+
+    /* Profile Settings */
+    .page-profile .container{ padding: 0 14px; }
+    .page-profile .card{ padding: 20px 16px; }
+    .page-profile h1{ font-size: 22px; }
+    .page-profile .avatar-row{ flex-wrap: wrap; }
+
+    /* Community */
+    .page-community .container{ padding: 0 14px; }
+    .page-community h1{ font-size: 24px; }
+
+    /* Courses */
+    .page-courses .catalog-header{ padding: 0 14px; }
+    .page-courses .catalog-header h1{ font-size: 22px; }
+    .page-courses .section-tag{ white-space: normal; }
+    .page-courses .courses-grid{ padding: 0 14px; }
 }

@@ -253,14 +253,32 @@ ul{
     color: var(--primary-blue);
     font-weight: 700;
 }
-.nav-profile{
+    .nav-profile{
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     background: none !important;
     color: var(--charcoal, #12233d) !important;
     padding: 0 !important;
     border: none !important;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.nav-profile img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nav-profile::after{
+    content: "▾";
+    font-size: 25px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-left: 2px;
 }
 .dashboard-page{
     min-height: 100vh;
@@ -2306,4 +2324,35 @@ ul{
     .spotlight-grid{
         grid-template-columns:1fr;
     }
+}
+/* ===========================
+   ACCOUNT PANEL EXTRAS
+=========================== */
+
+.account-gap {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 8px 0;
+}
+
+.account-contact-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.account-contact-options a {
+    font-size: 14px;
+    color: #5a6b7d !important;
+    font-weight: 500 !important;
+}
+.mobile-profile-icon{
+    display: none;
 }

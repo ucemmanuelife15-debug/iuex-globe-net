@@ -65,16 +65,38 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLoggedIn && navSignIn && navGetStarted) {
     navSignIn.style.display = "none";
 
-    navGetStarted.innerHTML = `
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+    let displayName = "there";
+    let avatarHtml = `
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="8" r="4"></circle>
         <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
       </svg>
-      My Account
     `;
-    navGetStarted.href = "dashboard.html";
+
+    if (savedAccount) {
+      displayName = savedAccount.username || savedAccount.fullname.split(" ")[0];
+      if (savedAccount.profilePicture) {
+        avatarHtml = `<img src="${savedAccount.profilePicture}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">`;
+      }
+    }
+
+       navGetStarted.innerHTML = `${avatarHtml} Welcome, ${displayName}`;
+    navGetStarted.href = "#";
     navGetStarted.classList.remove("cta-btn");
     navGetStarted.classList.add("nav-profile");
+
+       const mobileProfileIcon = document.getElementById("mobileProfileIcon");
+    if (mobileProfileIcon) {
+      mobileProfileIcon.classList.add("logged-in");
+      if (savedAccount && savedAccount.profilePicture) {
+        mobileProfileIcon.innerHTML = `<img src="${savedAccount.profilePicture}">`;
+      }
+      mobileProfileIcon.addEventListener("click", (e) => {
+        e.preventDefault();
+        navGetStarted.click();
+      });
+    }
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
@@ -101,11 +123,15 @@ document.addEventListener("DOMContentLoaded", () => {
     navGetStarted.addEventListener("click", (e) => {
       e.preventDefault();
 
-      const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
-      if (savedAccount) {
-        accountName.textContent = savedAccount.fullname.split(" ")[0];
-        accountEmail.textContent = savedAccount.email;
-      }
+     const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
+if (savedAccount) {
+  accountName.textContent = savedAccount.fullname.split(" ")[0];
+  accountEmail.textContent = savedAccount.email;
+  if (savedAccount.profilePicture) {
+    document.querySelector(".profile-avatar").innerHTML =
+      `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  }
+}
 
       accountPanel.classList.add("active");
       accountOverlay.classList.add("active");
@@ -130,28 +156,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const ctaGetStarted = document.getElementById("ctaGetStarted");
   const isLoggedInCheck = localStorage.getItem("isLoggedIn") === "true";
 
-  if (ctaGetStarted && isLoggedInCheck) {
-    ctaGetStarted.addEventListener("click", (e) => {
-      e.preventDefault();
+     if (ctaGetStarted && isLoggedInCheck) {
+     ctaGetStarted.addEventListener("click", (e) => {
+       e.preventDefault();
 
-      const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
-      if (savedAccount) {
-        accountName.textContent = savedAccount.fullname.split(" ")[0];
-        accountEmail.textContent = savedAccount.email;
-      }
+       const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
+       if (savedAccount) {
+         accountName.textContent = savedAccount.fullname.split(" ")[0];
+         accountEmail.textContent = savedAccount.email;
+         if (savedAccount.profilePicture) {
+           document.querySelector(".profile-avatar").innerHTML =
+             `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+         }
+       }
 
-      accountPanel.classList.add("active");
-      accountOverlay.classList.add("active");
-    });
-  }
-  const profileSettingsLink = document.querySelector(".account-links a[href='#']:not(#accountSignOut)");
+       accountPanel.classList.add("active");
+       accountOverlay.classList.add("active");
+     });
+   }
+  const contactUsToggle = document.getElementById("contactUsToggle");
+const contactOptions = document.getElementById("contactOptions");
 
-  if (profileSettingsLink) {
-    profileSettingsLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      alert("Profile Settings coming soon!");
-    });
-  }
+if (contactUsToggle && contactOptions) {
+  contactUsToggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    contactOptions.style.display = contactOptions.style.display === "none" ? "flex" : "none";
+  });
+}
 });
 const guestGateButtons = document.querySelectorAll(".guest-gate");
 

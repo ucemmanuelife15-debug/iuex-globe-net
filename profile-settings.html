@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profile Settings - IUEX Globe.Net</title>
+   <link rel="stylesheet" href="css/responsive.css">
 <style>
   :root {
     --primary-blue: #0B4F9C;
@@ -144,7 +145,7 @@
   .success { color: var(--bright-green); font-size: 13px; margin-top: 8px; font-weight: 600; }
 </style>
 </head>
-<body>
+<body class="page-profile">
 
 <div class="top-bar">
   <a href="index.html" class="back-link">&larr; Back to Home</a>
@@ -170,15 +171,14 @@
       <h2>Profile Picture</h2>
       <p class="hint">Optional — add a photo, or leave the default icon.</p>
       <div class="avatar-row">
-        <div class="avatar-circle" onclick="document.getElementById('pictureInput').click()">
+       <div class="avatar-circle" onclick="handleAvatarClick()">
           <span class="avatar-plus" id="avatarPlus">+</span>
           <img id="avatarImg" style="display:none;">
         </div>
-        <div class="avatar-actions">
-          <button class="small-btn" id="choosePhotoBtn" onclick="document.getElementById('pictureInput').click()">Choose Photo</button>
-          <button class="small-btn" id="removePicBtn" onclick="removePicture()" style="display:none;">Remove Photo</button>
-        </div>
-      </div>
+       <div class="avatar-actions">
+  <button class="small-btn" id="choosePhotoBtn" onclick="document.getElementById('pictureInput').click()">Choose Photo</button>
+  <button class="small-btn" id="removePicBtn" onclick="removePicture()" style="display:none;">Remove Photo</button>
+</div>
       <input type="file" id="pictureInput" accept="image/*" style="display:none;" onchange="handlePictureSelect(event)">
       <div id="pictureMsg"></div>
     </div>
@@ -192,6 +192,11 @@
       <div id="usernameMsg"></div>
       <button id="saveUsernameBtn" onclick="saveUsername()">Save Username</button>
     </div>
+    <!-- Photo View Modal -->
+<div id="photoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:999; align-items:center; justify-content:center;" onclick="closePhotoModal()">
+  <span style="position:absolute; top:24px; right:30px; color:white; font-size:32px; cursor:pointer; font-weight:300;" onclick="closePhotoModal()">&larr;</span>
+  <img id="modalImg" style="max-width:85%; max-height:85%; border-radius:12px;" onclick="event.stopPropagation()">
+</div>
 
     <!-- Change Password -->
     <div class="card">
@@ -248,12 +253,31 @@
     }
   });
 
-  function showPicturePreview(base64) {
-    document.getElementById("avatarImg").src = base64;
-    document.getElementById("avatarImg").style.display = "block";
-    document.getElementById("avatarPlus").style.display = "none";
-    document.getElementById("removePicBtn").style.display = "inline-block";
+   function showPicturePreview(base64) {
+  document.getElementById("avatarImg").src = base64;
+  document.getElementById("avatarImg").style.display = "block";
+  document.getElementById("avatarPlus").style.display = "none";
+  document.getElementById("removePicBtn").style.display = "inline-block";
+}
+
+function handleAvatarClick() {
+  if (currentAccount.profilePicture) {
+    viewPicture();
+  } else {
+    document.getElementById("pictureInput").click();
   }
+}
+
+function viewPicture() {
+  const modal = document.getElementById("photoModal");
+  const modalImg = document.getElementById("modalImg");
+  modalImg.src = currentAccount.profilePicture;
+  modal.style.display = "flex";
+}
+
+function closePhotoModal() {
+  document.getElementById("photoModal").style.display = "none";
+}
 
   function handlePictureSelect(event) {
     const file = event.target.files[0];
