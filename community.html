@@ -138,7 +138,20 @@
     encouragement, and connect with people on the same journey as you.
   </p>
 
-  <div class="card">
+  <!-- Shown if not logged in -->
+<div id="lockedSection" class="card" style="display:none; text-align:center;">
+  <h2>Sign in to join our WhatsApp community</h2>
+  <p style="color:#55556b; margin: 14px 0 20px;">
+    You need an account to join. It only takes a minute.
+  </p>
+ <button onclick="localStorage.setItem('redirectAfterAuth', 'community.html'); window.location.href='signup.html'"
+    style="background:#0B4F9C; color:#fff; border:none; padding:14px 28px; border-radius:50px; font-weight:600; font-size:15px; cursor:pointer;">
+    Sign In / Sign Up
+  </button>
+</div>
+
+<!-- Shown if logged in -->
+<div id="communitySection" class="card" style="display:none;">
     <h2>What you'll get</h2>
     <ul class="benefits">
       <li>Course updates and new content drops, first</li>
@@ -159,6 +172,21 @@
     <p class="note">Free to join. Leave anytime.</p>
   </div>
 </div>
+
+<script src="js/auth-gate.js"></script>
+<script src="js/session.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+
+    if (!isLoggedIn || !savedAccount) {
+      document.getElementById("lockedSection").style.display = "block";
+    } else {
+      document.getElementById("communitySection").style.display = "block";
+    }
+  });
+</script>
 
 </body>
 </html>

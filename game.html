@@ -193,7 +193,7 @@
   <!-- Shown if not logged in -->
   <div id="lockedSection" class="card locked-card" style="display:none;">
     <p>Sign in to join today's game and drop your answer.</p>
-    <button onclick="window.location.href='signup.html'">Sign In / Sign Up</button>
+    <button onclick="localStorage.setItem('redirectAfterAuth', 'game.html'); window.location.href='signup.html'">Sign In / Sign Up</button>
   </div>
 
   <!-- Main game section -->
@@ -221,6 +221,8 @@
 
 </div>
 
+<script src="js/auth-gate.js"></script>
+<script src="js/session.js"></script>
 <script>
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
   let currentQuestionId = null;
