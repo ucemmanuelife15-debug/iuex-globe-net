@@ -915,16 +915,11 @@ We put customers at the center of everything we do.
   });
 </script>
         <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("openAccount") === "true") {
-        const accountPanel = document.getElementById("accountPanel");
-        const accountOverlay = document.getElementById("accountOverlay");
-        if (accountPanel && accountOverlay) {
-          accountPanel.classList.add("active");
-          accountOverlay.classList.add("active");
-        }
-      }
-    </script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("openAccount") === "true" && typeof fillAndOpenAccountPanel === "function") {
+    fillAndOpenAccountPanel();
+  }
+</script>
 
 </body>
 </html>

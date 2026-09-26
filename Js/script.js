@@ -174,6 +174,19 @@ if (savedAccount) {
        accountOverlay.classList.add("active");
      });
    }
+   window.fillAndOpenAccountPanel = function () {
+  const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+  if (savedAccount) {
+    accountName.textContent = savedAccount.fullname.split(" ")[0];
+    accountEmail.textContent = savedAccount.email;
+    if (savedAccount.profilePicture) {
+      document.querySelector(".profile-avatar").innerHTML =
+        `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+  }
+  accountPanel.classList.add("active");
+  accountOverlay.classList.add("active");
+};
   const contactUsToggle = document.getElementById("contactUsToggle");
 const contactOptions = document.getElementById("contactOptions");
 
