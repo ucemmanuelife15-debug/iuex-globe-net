@@ -248,7 +248,7 @@ toggleAdminPassword.addEventListener("click", () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
 
-    if (!isLoggedIn || !savedAccount || !savedAccount.isAdmin) {
+    if (!isLoggedIn || !savedAccount || !savedAccount.isMainAdmin) {
       document.getElementById("lockedSection").style.display = "none";
       document.getElementById("notAdminSection").style.display = "block";
     }
