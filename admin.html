@@ -256,9 +256,13 @@
     postBtn.textContent = "Please wait...";
 
     try {
+      const token = localStorage.getItem("authToken");
       const res = await fetch(`${API_BASE}/create`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ question, category, postedBy })
       });
       const data = await res.json();
@@ -355,9 +359,13 @@
     }
 
     try {
+      const token = localStorage.getItem("authToken");
       await fetch(`${API_BASE}/question/${currentQuestionData._id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ question, category })
       });
       loadTodayQuestion();
@@ -382,8 +390,10 @@
     }
 
     try {
+      const token = localStorage.getItem("authToken");
       await fetch(`${API_BASE}/question/${currentQuestionData._id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
       });
       loadTodayQuestion();
       loadPastQuestions();
@@ -403,8 +413,10 @@
       btn.textContent = "Please wait...";
     }
     try {
+      const token = localStorage.getItem("authToken");
       await fetch(`${API_BASE}/answer/${questionId}/${answerId}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
       });
       loadTodayQuestion();
     } catch (err) {
@@ -420,7 +432,10 @@
     const pastList = document.getElementById("pastList");
     pastList.innerHTML = '<div class="loading-note">Loading...</div>';
     try {
-      const res = await fetch(`${API_BASE}/all`);
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${API_BASE}/all`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
       const all = await res.json();
 
       const past = all.slice(1);
@@ -453,8 +468,10 @@
       btn.textContent = "Please wait...";
     }
     try {
+      const token = localStorage.getItem("authToken");
       await fetch(`${API_BASE}/question/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
       });
       loadPastQuestions();
     } catch (err) {
