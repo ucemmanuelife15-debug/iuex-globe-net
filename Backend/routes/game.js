@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GameQuestion = require('../models/Game');
-const { requireMainAdmin } = require('../middleware/auth');
+const { requireAuth, requireAdmin, requireMainAdmin } = require('../middleware/auth');
 
 // GET today's question (most recent one)
 router.get('/today', async (req, res) => {
@@ -16,10 +16,16 @@ router.get('/today', async (req, res) => {
   }
 });
 
-// POST a new answer to the current question
-router.post('/answer', async (req, res) => {
+// POST a new answer to the current question — must be signed in, and
+// can only submit as yourself (your token's email must match userId).
+router.post('/answer', requireAuth, async (req, res) => {
   try {
     const { questionId, userId, username, answer } = req.body;
+
+    if (userId !== req.user.email) {
+      return res.status(403).json({ message: 'You can only submit your own answer' });
+    }
+
     const question = await GameQuestion.findById(questionId);
     if (!question) {
       return res.status(404).json({ message: 'Question not found' });
@@ -32,8 +38,9 @@ router.post('/answer', async (req, res) => {
   }
 });
 
-// EDIT/update a specific answer
-router.put('/answer/:questionId/:answerId', async (req, res) => {
+// EDIT/update a specific answer — must be signed in, and can only
+// edit your own answer (unless you're an admin, e.g. moderating).
+router.put('/answer/:questionId/:answerId', requireAuth, async (req, res) => {
   try {
     const { questionId, answerId } = req.params;
     const { answer } = req.body;
@@ -45,6 +52,11 @@ router.put('/answer/:questionId/:answerId', async (req, res) => {
     if (!targetAnswer) {
       return res.status(404).json({ message: 'Answer not found' });
     }
+
+    if (targetAnswer.userId !== req.user.email && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'You can only edit your own answer' });
+    }
+
     targetAnswer.answer = answer;
     await question.save();
     res.json({ message: 'Answer updated', question });
@@ -53,14 +65,25 @@ router.put('/answer/:questionId/:answerId', async (req, res) => {
   }
 });
 
-// DELETE a specific answer from a question
-router.delete('/answer/:questionId/:answerId', async (req, res) => {
+// DELETE a specific answer from a question — your own answer, or an
+// admin removing any answer (moderation).
+router.delete('/answer/:questionId/:answerId', requireAuth, async (req, res) => {
   try {
     const { questionId, answerId } = req.params;
     const question = await GameQuestion.findById(questionId);
     if (!question) {
       return res.status(404).json({ message: 'Question not found' });
     }
+
+    const targetAnswer = question.answers.id(answerId);
+    if (!targetAnswer) {
+      return res.status(404).json({ message: 'Answer not found' });
+    }
+
+    if (targetAnswer.userId !== req.user.email && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'You can only delete your own answer' });
+    }
+
     question.answers = question.answers.filter(
       (a) => a._id.toString() !== answerId
     );
@@ -71,10 +94,9 @@ router.delete('/answer/:questionId/:answerId', async (req, res) => {
   }
 });
 
-// Simple admin password check — now requires the caller to already be
+// Simple admin password check — requires the caller to already be
 // signed in as the main admin before they can even attempt this
-// password. Closes the loophole where anyone could hit this endpoint
-// directly (no sign-in at all) and try to guess the password.
+// password.
 router.post('/admin-login', requireMainAdmin, (req, res) => {
   const { password } = req.body;
   if (password === process.env.ADMIN_PASSWORD) {
@@ -84,8 +106,8 @@ router.post('/admin-login', requireMainAdmin, (req, res) => {
   }
 });
 
-// POST a new question (admin use)
-router.post('/create', async (req, res) => {
+// POST a new question (admin use only)
+router.post('/create', requireAdmin, async (req, res) => {
   try {
     const { question, category, postedBy } = req.body;
     const newQuestion = new GameQuestion({ question, category, postedBy });
@@ -97,7 +119,7 @@ router.post('/create', async (req, res) => {
 });
 
 // GET all questions (for admin history view)
-router.get('/all', async (req, res) => {
+router.get('/all', requireAdmin, async (req, res) => {
   try {
     const questions = await GameQuestion.find().sort({ date: -1 });
     res.json(questions);
@@ -106,8 +128,8 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// EDIT a question's text/category
-router.put('/question/:id', async (req, res) => {
+// EDIT a question's text/category (admin use only)
+router.put('/question/:id', requireAdmin, async (req, res) => {
   try {
     const { question, category } = req.body;
     const updated = await GameQuestion.findByIdAndUpdate(
@@ -124,8 +146,8 @@ router.put('/question/:id', async (req, res) => {
   }
 });
 
-// DELETE a question entirely
-router.delete('/question/:id', async (req, res) => {
+// DELETE a question entirely (admin use only)
+router.delete('/question/:id', requireAdmin, async (req, res) => {
   try {
     const deleted = await GameQuestion.findByIdAndDelete(req.params.id);
     if (!deleted) {

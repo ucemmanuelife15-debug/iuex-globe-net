@@ -42,9 +42,10 @@ router.post("/signin", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign(
+   const token = jwt.sign(
       {
         userId: user._id.toString(),
+        email: user.email,
         isAdmin: user.isAdmin || false,
         isMainAdmin: user.isMainAdmin || false,
       },
