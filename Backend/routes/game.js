@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GameQuestion = require('../models/Game');
+const { requireMainAdmin } = require('../middleware/auth');
 
 // GET today's question (most recent one)
 router.get('/today', async (req, res) => {
@@ -70,8 +71,11 @@ router.delete('/answer/:questionId/:answerId', async (req, res) => {
   }
 });
 
-// Simple admin password check
-router.post('/admin-login', (req, res) => {
+// Simple admin password check — now requires the caller to already be
+// signed in as the main admin before they can even attempt this
+// password. Closes the loophole where anyone could hit this endpoint
+// directly (no sign-in at all) and try to guess the password.
+router.post('/admin-login', requireMainAdmin, (req, res) => {
   const { password } = req.body;
   if (password === process.env.ADMIN_PASSWORD) {
     res.json({ success: true });

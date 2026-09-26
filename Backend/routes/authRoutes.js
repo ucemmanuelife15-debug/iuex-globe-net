@@ -3,7 +3,9 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 const resend = require("../emailConfig");
+const { requireAdmin, requireMainAdmin, requireSelfOrAdmin } = require("../middleware/auth");
 
 // Sign Up route
 router.post("/signup", async (req, res) => {
@@ -40,8 +42,19 @@ router.post("/signin", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
+    const token = jwt.sign(
+      {
+        userId: user._id.toString(),
+        isAdmin: user.isAdmin || false,
+        isMainAdmin: user.isMainAdmin || false,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "12h" }
+    );
+
    res.status(200).json({
   message: "Signed in successfully",
+  token,
   userId: user._id,
   fullname: user.fullname,
   isAdmin: user.isAdmin || false,
@@ -138,7 +151,7 @@ router.post("/join-waitlist", async (req, res) => {
 });
 
 // GET all users who joined a product waitlist (admin use)
-router.get("/waitlist-users", async (req, res) => {
+router.get("/waitlist-users", requireAdmin, async (req, res) => {
   try {
     const users = await User.find({ interestedProducts: { $exists: true, $ne: [] } })
       .select("fullname email interestedProducts");
@@ -149,7 +162,7 @@ router.get("/waitlist-users", async (req, res) => {
 });
 
 // GET all users (for admin management)
-router.get("/all-users", async (req, res) => {
+router.get("/all-users", requireAdmin, async (req, res) => {
   try {
     const users = await User.find().select("fullname email isAdmin isMainAdmin");
     res.json(users);
@@ -158,8 +171,8 @@ router.get("/all-users", async (req, res) => {
   }
 });
 
-// PROMOTE a user to admin
-router.put("/make-admin/:id", async (req, res) => {
+// PROMOTE a user to admin (main admin only)
+router.put("/make-admin/:id", requireMainAdmin, async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,
@@ -175,8 +188,8 @@ router.put("/make-admin/:id", async (req, res) => {
   }
 });
 
-// REMOVE a user's admin status (cannot remove the main admin)
-router.put("/remove-admin/:id", async (req, res) => {
+// REMOVE a user's admin status (main admin only; cannot remove the main admin)
+router.put("/remove-admin/:id", requireMainAdmin, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -193,8 +206,8 @@ router.put("/remove-admin/:id", async (req, res) => {
   }
 });
 
-// UPDATE username and/or profile picture
-router.put("/update-profile/:id", async (req, res) => {
+// UPDATE username and/or profile picture (only your own account, or an admin)
+router.put("/update-profile/:id", requireSelfOrAdmin, async (req, res) => {
   try {
     const { username, profilePicture } = req.body;
     const updateData = {};
@@ -215,8 +228,8 @@ router.put("/update-profile/:id", async (req, res) => {
   }
 });
 
-// CHANGE password (requires old password)
-router.put("/change-password/:id", async (req, res) => {
+// CHANGE password (requires old password, and only your own account)
+router.put("/change-password/:id", requireSelfOrAdmin, async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const user = await User.findById(req.params.id);
