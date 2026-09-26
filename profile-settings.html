@@ -350,9 +350,13 @@ function closePhotoModal() {
     chooseBtn.textContent = "Please wait...";
 
     try {
+      const token = localStorage.getItem("authToken");
       const res = await fetch(`${AUTH_BASE}/update-profile/${currentAccount.userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ profilePicture: base64 })
       });
       const data = await res.json();
@@ -381,9 +385,13 @@ function closePhotoModal() {
     removeBtn.textContent = "Please wait...";
 
     try {
+      const token = localStorage.getItem("authToken");
       const res = await fetch(`${AUTH_BASE}/update-profile/${currentAccount.userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ profilePicture: "" })
       });
 
@@ -415,9 +423,13 @@ function closePhotoModal() {
     btn.textContent = "Please wait...";
 
     try {
+      const token = localStorage.getItem("authToken");
       const res = await fetch(`${AUTH_BASE}/update-profile/${currentAccount.userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ username })
       });
       const data = await res.json();
@@ -459,9 +471,13 @@ function closePhotoModal() {
     btn.textContent = "Please wait...";
 
     try {
+      const token = localStorage.getItem("authToken");
       const res = await fetch(`${AUTH_BASE}/change-password/${currentAccount.userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ oldPassword, newPassword })
       });
       const data = await res.json();

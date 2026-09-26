@@ -97,6 +97,7 @@ if (password !== confirmPassword) {
 
         if (response.ok) {
  localStorage.setItem("isLoggedIn", "true");
+ localStorage.setItem("authToken", data.token);
  localStorage.setItem("userAccount", JSON.stringify({
  userId: data.userId,
  fullname: data.fullname,

@@ -203,7 +203,10 @@
   async function loadWaitlist() {
     const userList = document.getElementById("userList");
     try {
-      const res = await fetch(`${API_BASE}/waitlist-users`);
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${API_BASE}/waitlist-users`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
       allUsers = await res.json();
       hasLoaded = true;
       renderList();
