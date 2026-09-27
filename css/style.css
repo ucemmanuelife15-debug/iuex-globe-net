@@ -186,9 +186,9 @@ ul{
 
 .logo img{
 
-    width:75px;
-    height:75px;
-    margin-bottom: 15px;
+    width:62px;
+    height:62px;
+    margin-bottom: 12px;
 
 }
 .logo-text{
@@ -203,7 +203,7 @@ ul{
 }
 
 .logo-text h2{
-    font-size:1.15rem;
+    font-size:1.05rem;
 
     color:var(--primary-blue);
 
@@ -213,7 +213,7 @@ ul{
 
 .logo-text p{
 
-    font-size:0.72rem;
+    font-size:0.68rem;
 
     color:var(--charcoal);
 
@@ -2377,4 +2377,34 @@ ul{
     font-size: 18px;
     padding: 5px;
     line-height: 1;
+}
+/* ===========================
+   WELCOME BANNER
+=========================== */
+
+.welcome-banner{
+    width:90%;
+    max-width:1300px;
+    margin:20px auto 0;
+    text-align:center;
+    background:rgba(11,79,156,.08);
+    color:var(--primary-blue);
+    font-weight:700;
+    font-size:1rem;
+    padding:12px 20px;
+    border-radius:12px;
+}
+
+/* ===========================
+   MOBILE LOCATION LABEL
+   (hidden on desktop by default; shown only inside the
+   @media max-width:768px block in responsive.css)
+=========================== */
+
+.mobile-breadcrumb{
+    display:none;
+}
+
+.mobile-page-breadcrumb{
+    display:none;
 }
