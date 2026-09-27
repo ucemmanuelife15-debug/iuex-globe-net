@@ -290,7 +290,10 @@
     wrap.innerHTML = '<div class="loading-note">Loading... (first load after inactivity can take up to a minute)</div>';
 
     try {
-      const res = await fetch(`${API_BASE}/today`);
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${API_BASE}/today`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
       if (!res.ok) {
         wrap.textContent = "No question set yet.";
         answersBox.innerHTML = "";

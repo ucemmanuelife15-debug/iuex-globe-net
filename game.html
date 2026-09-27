@@ -261,7 +261,10 @@
     const answerCount = document.getElementById("answerCount");
 
     try {
-      const res = await fetch(`${API_BASE}/today`);
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${API_BASE}/today`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
       if (!res.ok) {
         questionBox.innerHTML = '<p style="color:#8899aa;">No game question has been posted yet. Check back soon!</p>';
         answersBox.innerHTML = "";
