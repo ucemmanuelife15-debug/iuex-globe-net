@@ -13,6 +13,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll("section[id], footer[id]");
   const navLinks = document.querySelectorAll(".nav-links a");
 
+  const sectionNames = {
+    home: "Home",
+    about: "About Us",
+    products: "Products",
+    services: "Services",
+    news: "News",
+    contact: "Contact"
+  };
+
+  function updateBreadcrumb(current) {
+    const breadcrumb = document.getElementById("mobileBreadcrumb");
+    if (!breadcrumb) return;
+    if (!current || current === "home") {
+      breadcrumb.innerHTML = '<span class="crumb-home">Home</span>';
+    } else {
+      const label = sectionNames[current] || current;
+      breadcrumb.innerHTML = `<span class="crumb-home">Home</span><span class="crumb-sep">/</span><span class="crumb-current">${label}</span>`;
+    }
+  }
+
  window.addEventListener("scroll", () => {
     let current = "";
 
@@ -35,7 +55,24 @@ document.addEventListener("DOMContentLoaded", () => {
         link.classList.add("active");
       }
     });
+
+    updateBreadcrumb(current);
   });
+});
+
+// ===== WELCOME BANNER (logged-in users only) =====
+document.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const welcomeBanner = document.getElementById("welcomeBanner");
+
+  if (isLoggedIn && welcomeBanner) {
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+    if (savedAccount) {
+      const displayName = savedAccount.username || savedAccount.fullname.split(" ")[0];
+      document.getElementById("welcomeBannerName").textContent = displayName;
+      welcomeBanner.style.display = "block";
+    }
+  }
 });
 document.addEventListener("DOMContentLoaded", () => {
   const protectedButtons = document.querySelectorAll(".protected-action");
@@ -99,14 +136,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+// ===== SHARED: fill the account panel with the logged-in user's real
+// info and open it. Used by the nav profile icon, CTA "Get Started",
+// the "Learn More" buttons (for logged-in users), and the
+// openAccount=true redirect from other pages — so every entry point
+// shows the same real data instead of some showing placeholders. =====
+function openAccountPanel() {
+  const accountPanel = document.getElementById("accountPanel");
+  const accountOverlay = document.getElementById("accountOverlay");
+  const accountName = document.getElementById("accountName");
+  const accountEmail = document.getElementById("accountEmail");
+
+  const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+  if (savedAccount) {
+    accountName.textContent = savedAccount.fullname.split(" ")[0];
+    accountEmail.textContent = savedAccount.email;
+    if (savedAccount.profilePicture) {
+      document.querySelector(".profile-avatar").innerHTML =
+        `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+  }
+
+  accountPanel.classList.add("active");
+  accountOverlay.classList.add("active");
+}
+window.openAccountPanel = openAccountPanel;
+
 document.addEventListener("DOMContentLoaded", () => {
   const navGetStarted = document.getElementById("navGetStarted");
   const accountPanel = document.getElementById("accountPanel");
   const accountOverlay = document.getElementById("accountOverlay");
   const accountClose = document.getElementById("accountClose");
   const accountSignOut = document.getElementById("accountSignOut");
-  const accountName = document.getElementById("accountName");
-  const accountEmail = document.getElementById("accountEmail");
   const adminLink = document.getElementById("adminLink");
 
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -122,19 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLoggedIn && navGetStarted) {
     navGetStarted.addEventListener("click", (e) => {
       e.preventDefault();
-
-     const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
-if (savedAccount) {
-  accountName.textContent = savedAccount.fullname.split(" ")[0];
-  accountEmail.textContent = savedAccount.email;
-  if (savedAccount.profilePicture) {
-    document.querySelector(".profile-avatar").innerHTML =
-      `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-  }
-}
-
-      accountPanel.classList.add("active");
-      accountOverlay.classList.add("active");
+      openAccountPanel();
     });
   }
 
@@ -153,40 +203,17 @@ if (savedAccount) {
       window.location.href = "index.html";
     });
   }
+
   const ctaGetStarted = document.getElementById("ctaGetStarted");
   const isLoggedInCheck = localStorage.getItem("isLoggedIn") === "true";
 
-     if (ctaGetStarted && isLoggedInCheck) {
-     ctaGetStarted.addEventListener("click", (e) => {
-       e.preventDefault();
-
-       const savedAccount = JSON.parse(localStorage.getItem("userAccount"));
-       if (savedAccount) {
-         accountName.textContent = savedAccount.fullname.split(" ")[0];
-         accountEmail.textContent = savedAccount.email;
-         if (savedAccount.profilePicture) {
-           document.querySelector(".profile-avatar").innerHTML =
-             `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-         }
-       }
-
-       accountPanel.classList.add("active");
-       accountOverlay.classList.add("active");
-     });
-   }
-   window.fillAndOpenAccountPanel = function () {
-  const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
-  if (savedAccount) {
-    accountName.textContent = savedAccount.fullname.split(" ")[0];
-    accountEmail.textContent = savedAccount.email;
-    if (savedAccount.profilePicture) {
-      document.querySelector(".profile-avatar").innerHTML =
-        `<img src="${savedAccount.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-    }
+  if (ctaGetStarted && isLoggedInCheck) {
+    ctaGetStarted.addEventListener("click", (e) => {
+      e.preventDefault();
+      openAccountPanel();
+    });
   }
-  accountPanel.classList.add("active");
-  accountOverlay.classList.add("active");
-};
+
   const contactUsToggle = document.getElementById("contactUsToggle");
 const contactOptions = document.getElementById("contactOptions");
 
