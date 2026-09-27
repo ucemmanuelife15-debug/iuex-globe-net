@@ -3,8 +3,10 @@ const router = express.Router();
 const GameQuestion = require('../models/Game');
 const { requireAuth, requireAdmin, requireMainAdmin } = require('../middleware/auth');
 
-// GET today's question (most recent one)
-router.get('/today', async (req, res) => {
+// GET today's question (most recent one) — requires being signed in,
+// since the answers list includes real names and emails and
+// shouldn't be visible to random visitors just guessing the URL.
+router.get('/today', requireAuth, async (req, res) => {
   try {
     const question = await GameQuestion.findOne().sort({ date: -1 });
     if (!question) {
