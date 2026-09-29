@@ -144,7 +144,7 @@
 <body class="page-admin-manage">
 
 <div class="top-bar">
-  <a href="admin-dashboard.html" class="back-link">&larr; Back to Admin Dashboard</a>
+  <a href="admin-dashboard.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
 </div>
 
 <div class="container">
@@ -198,13 +198,10 @@
     loadUsers();
   });
 
- async function loadUsers() {
+  async function loadUsers() {
     const userList = document.getElementById("userList");
     try {
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(`${AUTH_BASE}/all-users`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const res = await fetch(`${AUTH_BASE}/all-users`);
       const data = await res.json();
 
       // Oldest-first: sort by _id, since MongoDB ObjectIds are

@@ -41,6 +41,10 @@
 </head>
 <body class="page-eroute-signup">
 
+    <div class="top-bar">
+        <a href="eroute.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+    </div>
+
     <div class="auth-page eroute-theme">
 
         <div class="auth-card">
@@ -85,14 +89,15 @@
             </form>
 
             <p class="auth-switch">
-                <a href="eroute.html">← Back to ERoute</a>
+                <a href="eroute.html" onclick="history.back(); return false;">← Back to ERoute</a>
             </p>
 
         </div>
 
     </div>
 
-   const togglePassword = document.getElementById("togglePassword");
+    <script>
+      const togglePassword = document.getElementById("togglePassword");
 const passwordInput = document.getElementById("password");
 
 togglePassword.addEventListener("click", () => {

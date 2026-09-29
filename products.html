@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products - IUEX Globe.Net</title>
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+  .top-bar { padding: 20px 30px; }
+  .back-link {
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body class="page-products">
+
+<div class="top-bar">
+  <a href="index.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+  <div class="mobile-page-breadcrumb">
+    <div class="crumb-row"><span class="crumb-home">Home</span><span class="crumb-sep">/</span><span class="crumb-current">Products</span></div>
+    <div class="quicklinks-row">
+      <a href="products.html" class="quick-products">Products</a>
+      <a href="game.html" class="quick-game">Game</a>
+      <a href="community.html" class="quick-community">Community</a>
+    </div>
+  </div>
+</div>
+
+<section class="products" id="products">
+
+    <div class="products-header">
+
+        <span class="section-tag">OUR PRODUCTS</span>
+
+        <h2>Innovative Digital Products Built for the Future</h2>
+
+        <p>
+            Discover our growing ecosystem of digital products designed
+            to connect people, simplify everyday experiences, and create
+            opportunities through technology.
+        </p>
+
+    </div>
+
+    <div class="products-grid">
+
+        <!-- ELink -->
+
+        <div class="product-card">
+
+            <img src="images/Logo/Elink logo without name.png" alt="ELink Logo">
+
+            <h3>ELink</h3>
+
+            <p>
+                Connecting skilled professionals, businesses, and job
+                opportunities through one intelligent digital platform.
+            </p>
+
+            <a href="elink.html" onclick="return gateClick(event, this)">Learn More →</a>
+        </div>
+
+        <!-- ERoute -->
+
+        <div class="product-card">
+
+            <img src="images/Logo/Eroute logo without name.png" alt="ERoute Logo">
+
+            <h3>ERoute</h3>
+
+            <p>
+                A smart travel and booking platform that simplifies
+                flights, transportation, and digital travel experiences.
+            </p>
+
+            <a href="eroute.html" onclick="return gateClick(event, this)">Learn More →</a>
+        </div>
+
+    </div>
+
+    <div class="products-btn">
+
+        <a href="#" class="learn-btn guest-gate" data-message="Our full product catalog is coming soon! Stay tuned.">
+            View All Products
+        </a>
+
+    </div>
+
+</section>
+
+<script src="js/auth-gate.js"></script>
+<script src="js/session.js"></script>
+<script>
+  // Same guest-gate logic used on the homepage's "View All Products" button
+  document.addEventListener("DOMContentLoaded", () => {
+    const guestGateButtons = document.querySelectorAll(".guest-gate");
+    guestGateButtons.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+        const message = btn.getAttribute("data-message") || "This feature is coming soon!";
+        if (loggedIn) {
+          alert(message);
+        } else {
+          window.location.href = "signup.html";
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

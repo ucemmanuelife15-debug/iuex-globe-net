@@ -173,7 +173,7 @@
 <body class="page-admin-manage">
 
 <div class="top-bar">
-  <a href="admin-dashboard.html" class="back-link">&larr; Back to Admin Dashboard</a>
+  <a href="admin-dashboard.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
 </div>
 
 <div class="container">
@@ -264,13 +264,9 @@ toggleAdminPassword.addEventListener("click", () => {
     unlockBtn.textContent = "Please wait...";
 
     try {
-      const token = localStorage.getItem("authToken");
       const res = await fetch(`${API_BASE}/admin-login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password })
       });
       const data = await res.json();
@@ -296,10 +292,7 @@ toggleAdminPassword.addEventListener("click", () => {
     const userList = document.getElementById("userList");
     userList.innerHTML = '<div class="loading-note">Loading users... (first load after inactivity can take up to a minute)</div>';
     try {
-     const token = localStorage.getItem("authToken");
-      const res = await fetch(`${AUTH_BASE}/all-users`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const res = await fetch(`${AUTH_BASE}/all-users`);
       allUsers = await res.json();
       renderList();
     } catch (err) {
@@ -357,11 +350,7 @@ toggleAdminPassword.addEventListener("click", () => {
       btn.textContent = "Please wait...";
     }
     try {
-     const token = localStorage.getItem("authToken");
-      await fetch(`${AUTH_BASE}/make-admin/${id}`, {
-        method: "PUT",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      await fetch(`${AUTH_BASE}/make-admin/${id}`, { method: "PUT" });
       loadUsers();
     } catch (err) {
       alert("Could not promote user. Try again.");
@@ -380,11 +369,7 @@ toggleAdminPassword.addEventListener("click", () => {
       btn.textContent = "Please wait...";
     }
     try {
-     const token = localStorage.getItem("authToken");
-      const res = await fetch(`${AUTH_BASE}/remove-admin/${id}`, {
-        method: "PUT",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const res = await fetch(`${AUTH_BASE}/remove-admin/${id}`, { method: "PUT" });
       const data = await res.json();
       if (!res.ok) {
         alert(data.message || "Could not remove admin access.");

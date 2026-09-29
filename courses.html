@@ -11,16 +11,23 @@
 <body class="page-courses">
            <script>
       if (localStorage.getItem("isLoggedIn") !== "true") {
+        localStorage.setItem("redirectAfterAuth", "courses.html");
         window.location.href = "signup.html";
       }
     </script>
 
     <div class="catalog-page">
 
-    <div class="catalog-page">
-
         <div class="catalog-header">
-            <a href="index.html" class="back-link">← Back to Home</a>
+            <a href="index.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+            <div class="mobile-page-breadcrumb">
+                <div class="crumb-row"><span class="crumb-home">Home</span><span class="crumb-sep">/</span><span class="crumb-current">Courses</span></div>
+                <div class="quicklinks-row">
+                    <a href="products.html" class="quick-products">Products</a>
+                    <a href="game.html" class="quick-game">Game</a>
+                    <a href="community.html" class="quick-community">Community</a>
+                </div>
+            </div>
             <span class="section-tag">CODING COURSES</span>
             <h1>Learn Practical Tech Skills</h1>
             <p class="catalog-subtext">

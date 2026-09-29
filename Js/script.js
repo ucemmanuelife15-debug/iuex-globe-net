@@ -23,13 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function updateBreadcrumb(current) {
-    const breadcrumb = document.getElementById("mobileBreadcrumb");
-    if (!breadcrumb) return;
+    const crumbRow = document.querySelector("#mobileBreadcrumb .crumb-row");
+    if (!crumbRow) return;
     if (!current || current === "home") {
-      breadcrumb.innerHTML = '<span class="crumb-home">Home</span>';
+      crumbRow.innerHTML = '<span class="crumb-home">Home</span>';
     } else {
       const label = sectionNames[current] || current;
-      breadcrumb.innerHTML = `<span class="crumb-home">Home</span><span class="crumb-sep">/</span><span class="crumb-current">${label}</span>`;
+      crumbRow.innerHTML = `<span class="crumb-home">Home</span><span class="crumb-sep">/</span><span class="crumb-current">${label}</span>`;
     }
   }
 
