@@ -1,18 +1,1 @@
-// Shared auth gate — include this file on every page that has a
-// button/link that should require sign in first (Learn More, Explore
-// Products, Need Help, etc).
-//
-// Usage on any <a>:
-//   <a href="somepage.html" onclick="return gateClick(event, this)">...</a>
-//
-function gateClick(e, el) {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  if (!isLoggedIn) {
-    e.preventDefault();
-    const target = el.getAttribute("href");
-    localStorage.setItem("redirectAfterAuth", target);
-    window.location.href = "signup.html";
-    return false;
-  }
-  return true; // logged in — let the link work normally
-}
+function a0_0x3d9e(_0x4e523a,_0xd61a35){_0x4e523a=_0x4e523a-0x1d6;const _0x209598=a0_0x2095();let _0x3d9e9d=_0x209598[_0x4e523a];if(a0_0x3d9e['mNneWP']===undefined){var _0xf388a8=function(_0x3273d1){const _0xe55047='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x437bf3='',_0x1f7cac='';for(let _0x27226e=0x0,_0x4503d3,_0x18f504,_0x411956=0x0;_0x18f504=_0x3273d1['charAt'](_0x411956++);~_0x18f504&&(_0x4503d3=_0x27226e%0x4?_0x4503d3*0x40+_0x18f504:_0x18f504,_0x27226e++%0x4)?_0x437bf3+=String['fromCharCode'](0xff&_0x4503d3>>(-0x2*_0x27226e&0x6)):0x0){_0x18f504=_0xe55047['indexOf'](_0x18f504);}for(let _0x4078da=0x0,_0x439060=_0x437bf3['length'];_0x4078da<_0x439060;_0x4078da++){_0x1f7cac+='%'+('00'+_0x437bf3['charCodeAt'](_0x4078da)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x1f7cac);};a0_0x3d9e['hxkGiA']=_0xf388a8,a0_0x3d9e['jRiYBq']={},a0_0x3d9e['mNneWP']=!![];}const _0x5424a5=_0x209598[0x0];a0_0x3d9e['GibfGH']!==_0x5424a5&&(a0_0x3d9e['jRiYBq']={},a0_0x3d9e['GibfGH']=_0x5424a5);const _0x4a1189=a0_0x3d9e['jRiYBq'][_0x4e523a];return _0x4a1189===undefined?(_0x3d9e9d=a0_0x3d9e['hxkGiA'](_0x3d9e9d),a0_0x3d9e['jRiYBq'][_0x4e523a]=_0x3d9e9d):_0x3d9e9d=_0x4a1189,_0x3d9e9d;}(function(_0x26709a,_0x92cd9e){const _0x2ee879=a0_0x3d9e,_0x25c3ad=_0x26709a();while(!![]){try{const _0x5e75e1=-parseInt(_0x2ee879(0x1d7))/0x1*(parseInt(_0x2ee879(0x1e0))/0x2)+-parseInt(_0x2ee879(0x1e1))/0x3+-parseInt(_0x2ee879(0x1d6))/0x4+-parseInt(_0x2ee879(0x1d8))/0x5*(parseInt(_0x2ee879(0x1e7))/0x6)+parseInt(_0x2ee879(0x1db))/0x7*(-parseInt(_0x2ee879(0x1e3))/0x8)+parseInt(_0x2ee879(0x1df))/0x9+-parseInt(_0x2ee879(0x1d9))/0xa*(-parseInt(_0x2ee879(0x1e6))/0xb);if(_0x5e75e1===_0x92cd9e)break;else _0x25c3ad['push'](_0x25c3ad['shift']());}catch(_0x1198b3){_0x25c3ad['push'](_0x25c3ad['shift']());}}}(a0_0x2095,0xc91c5));function a0_0x2095(){const _0x5f4fd4=['m2LmCuDPqG','ode5mtKWA0rLrKjj','mtb2CgLez0W','AgLHuuK','mtmZsxnkzKLP','Dhj1zq','Bg9JyxrPB24','C2v0sxrLBq','odm2mJCYog90tfnwBa','nJG0nda0twHMEfbg','ndCYotG5mgjrqKTvEa','C2LNBNvWlMH0BwW','nteWotiWzu9mEgjo','sujgzMy','z2v0qxr0CMLIDxrL','ntC1ody3nZfuC0jpwhu','ndjwqKPOr0C','AhjLzG','mtuWodi2ohL1tMv2wq'];a0_0x2095=function(){return _0x5f4fd4;};return a0_0x2095();}function gateClick(_0x47b6ca,_0x46b3ed){const _0x1ede53=a0_0x3d9e,_0x4ea289={'mhGhE':function(_0x145d01,_0x17ba55){return _0x145d01===_0x17ba55;},'IBFff':_0x1ede53(0x1e8),'hiaQI':'redirectAfterAuth','LKXMx':_0x1ede53(0x1e2)},_0x25ea32=_0x4ea289['mhGhE'](localStorage['getItem']('isLoggedIn'),_0x1ede53(0x1dc));if(!_0x25ea32){_0x47b6ca['preventDefault']();const _0x412efe=_0x46b3ed[_0x1ede53(0x1e5)](_0x4ea289[_0x1ede53(0x1e4)]);return localStorage[_0x1ede53(0x1de)](_0x4ea289[_0x1ede53(0x1da)],_0x412efe),window[_0x1ede53(0x1dd)][_0x1ede53(0x1e8)]=_0x4ea289['LKXMx'],![];}return!![];}
