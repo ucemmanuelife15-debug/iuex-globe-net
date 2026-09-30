@@ -96,10 +96,10 @@ router.delete('/answer/:questionId/:answerId', requireAuth, async (req, res) => 
   }
 });
 
-// Simple admin password check — requires the caller to already be
-// signed in as the main admin before they can even attempt this
-// password.
-router.post('/admin-login', requireMainAdmin, (req, res) => {
+// Simple admin password check — this IS the login step for chairman-only
+// actions, so it must stay open (no requireAuth/requireAdmin in front of
+// it). It's still protected: the caller has to know process.env.ADMIN_PASSWORD.
+router.post('/admin-login', (req, res) => {
   const { password } = req.body;
   if (password === process.env.ADMIN_PASSWORD) {
     res.json({ success: true });
