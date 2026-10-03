@@ -15,6 +15,45 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .home-reviews-section {
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .home-reviews-header h2 { color: var(--primary-blue); margin: 8px 0 10px; }
+        .home-reviews-avg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .home-reviews-avg-value { font-size: 1.6rem; font-weight: 700; color: var(--primary-blue); }
+        .home-reviews-avg-count { color: #8899aa; font-size: 0.85rem; }
+        .home-star { color: #d0d7e2; font-size: 1rem; }
+        .home-star.filled { color: #f5a623; }
+        .home-reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto 30px;
+        }
+        .home-review-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            text-align: left;
+        }
+        .home-review-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .home-review-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+        .home-review-name { font-weight: 600; font-size: 14px; }
+        .home-review-comment { font-size: 13px; color: #556; margin-top: 8px; line-height: 1.5; }
+        .home-reviews-empty { color: #8899aa; font-size: 14px; grid-column: 1 / -1; }
+        .home-reviews-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    </style>
 
 </head>
 
@@ -48,6 +87,7 @@
     <li><a href="#products">Products</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#news">News</a></li>
+    <li><a href="#reviews-preview">Reviews</a></li>
     <li><a href="#contact">Contact</a></li>
 </ul>
 
@@ -429,7 +469,7 @@
     <div class="section-title">
 
         <h2>
-            Our <strong>Vision</strong> & 
+            Our <strong>Vision</strong> &
             <em>Mission</em>
         </h2>
 
@@ -797,6 +837,32 @@ We put customers at the center of everything we do.
     </div>
   </div>
 </section>
+
+<!-- ===========================
+     REVIEWS PREVIEW SECTION
+=========================== -->
+
+<section id="reviews-preview" class="home-reviews-section">
+    <div class="home-reviews-header">
+        <span class="section-tag">WHAT PEOPLE ARE SAYING</span>
+        <h2>Reviews From Our Community</h2>
+        <div class="home-reviews-avg" id="homeReviewsAvg" style="display:none;">
+            <span class="home-reviews-avg-value" id="homeAvgValue">0.0</span>
+            <span id="homeAvgStars"></span>
+            <span class="home-reviews-avg-count" id="homeAvgCount"></span>
+        </div>
+    </div>
+
+    <div class="home-reviews-grid" id="homeReviewsGrid">
+        <div class="home-reviews-empty">Loading reviews...</div>
+    </div>
+
+    <div class="home-reviews-actions">
+        <a href="reviews.html" class="learn-btn">See All Reviews</a>
+        <a href="reviews.html" class="learn-btn">Write a Review</a>
+    </div>
+</section>
+
 <!-- ===========================
      FOOTER SECTION
 =========================== -->
@@ -941,6 +1007,60 @@ We put customers at the center of everything we do.
       if (urlParams.get("openAccount") === "true" && typeof openAccountPanel === "function") {
         openAccountPanel();
       }
+    </script>
+
+    <!-- ===========================
+         HOMEPAGE REVIEWS PREVIEW
+    =========================== -->
+    <script>
+      (function () {
+        const REVIEWS_API = "https://iuex-globe-net-backend.onrender.com/api/reviews";
+
+        function homeStars(rating) {
+          let html = "";
+          for (let i = 1; i <= 5; i++) {
+            html += `<span class="home-star${i <= rating ? " filled" : ""}">&#9733;</span>`;
+          }
+          return html;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+          const grid = document.getElementById("homeReviewsGrid");
+          try {
+            const res = await fetch(`${REVIEWS_API}/approved`);
+            const reviews = await res.json();
+
+            if (!reviews.length) {
+              grid.innerHTML = '<div class="home-reviews-empty">No reviews yet — be the first to share your experience.</div>';
+              return;
+            }
+
+            const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+            document.getElementById("homeAvgValue").textContent = avg.toFixed(1);
+            document.getElementById("homeAvgStars").innerHTML = homeStars(Math.round(avg));
+            document.getElementById("homeAvgCount").textContent = `based on ${reviews.length} review${reviews.length === 1 ? "" : "s"}`;
+            document.getElementById("homeReviewsAvg").style.display = "flex";
+
+            grid.innerHTML = reviews.slice(0, 3).map((r) => {
+              const user = r.userId || {};
+              const name = user.fullname || "IUEX Globe.Net User";
+              const photo = user.profilePicture || "images/Logo/MB Logo without name.png";
+              return `
+                <div class="home-review-card">
+                  <div class="home-review-top">
+                    <img src="${photo}" alt="${name}" class="home-review-avatar">
+                    <span class="home-review-name">${name}</span>
+                  </div>
+                  <div>${homeStars(r.rating)}</div>
+                  <p class="home-review-comment">${r.comment}</p>
+                </div>
+              `;
+            }).join("");
+          } catch (err) {
+            grid.innerHTML = '<div class="home-reviews-empty">Could not load reviews right now.</div>';
+          }
+        });
+      })();
     </script>
 
 </body>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews - IUEX Globe.Net</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .reviews-page {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px 24px 60px;
+        }
+        .reviews-header { text-align: center; margin-bottom: 24px; }
+        .reviews-header h1 { color: var(--primary-blue); margin-bottom: 8px; }
+        .avg-rating-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .avg-rating-value { font-size: 2rem; font-weight: 700; color: var(--primary-blue); }
+        .avg-rating-count { color: #8899aa; font-size: 0.85rem; }
+        .star-display { color: #d0d7e2; font-size: 1.1rem; }
+        .star-display.filled { color: #f5a623; }
+        .write-review-btn {
+            display: block;
+            margin: 0 auto 30px;
+        }
+        .my-review-area { margin-bottom: 36px; }
+        .my-review-card, .review-form-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .status-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+        .status-pending { background: rgba(245, 166, 35, 0.12); color: #c98314; }
+        .status-live { background: rgba(34,197,94,0.12); color: #22c55e; }
+        .my-review-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .my-review-actions button, .review-form-card button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .edit-btn { background: var(--electric-blue); color: #fff; }
+        .delete-btn { background: #e5484d; color: #fff; }
+        .cancel-btn { background: #eee; color: #222831; margin-left: 8px; }
+        #starPicker { display: flex; gap: 6px; margin-bottom: 16px; }
+        #starPicker .star {
+            font-size: 1.8rem;
+            color: #d0d7e2;
+            cursor: pointer;
+        }
+        #starPicker .star.filled { color: #f5a623; }
+        .review-form-card textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid #d0d7e2;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 14px;
+            resize: vertical;
+        }
+        .form-error { color: #e5484d; font-size: 13px; margin-bottom: 10px; }
+        .reviews-list { display: flex; flex-direction: column; gap: 16px; }
+        .review-card {
+            display: flex;
+            gap: 14px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .review-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .review-name { font-weight: 600; font-size: 14px; }
+        .review-date { font-size: 12px; color: #8899aa; }
+        .review-comment { font-size: 14px; color: #222831; margin-top: 8px; line-height: 1.5; }
+        .reviews-empty {
+            text-align: center;
+            color: #8899aa;
+            padding: 30px 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="page-reviews">
+
+    <div class="top-bar">
+        <a href="index.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+    </div>
+    <div class="mobile-page-breadcrumb">
+        <div class="crumb-row"><span class="crumb-home">Home</span><span class="crumb-sep">/</span><span class="crumb-current">Reviews</span></div>
+        <div class="quicklinks-row">
+            <a href="products.html" class="quick-products">Products</a>
+            <a href="game.html" class="quick-game">Game</a>
+            <a href="community.html" class="quick-community">Community</a>
+        </div>
+    </div>
+
+    <div class="reviews-page">
+
+        <div class="reviews-header">
+            <h1>Customer Reviews</h1>
+            <p>See what the IUEX Globe.Net community is saying.</p>
+        </div>
+
+        <div class="avg-rating-area" id="avgRatingArea" style="display:none;">
+            <span class="avg-rating-value" id="avgRatingValue">0.0</span>
+            <span id="avgRatingStars"></span>
+            <span class="avg-rating-count" id="avgRatingCount"></span>
+        </div>
+
+        <button class="cta-btn write-review-btn" id="writeReviewBtn">Write a Review</button>
+
+        <div class="my-review-area" id="myReviewArea" style="display:none;">
+            <div id="myReviewStatus"></div>
+
+            <div class="my-review-actions" id="myReviewActions" style="display:none;">
+                <button class="edit-btn" id="editBtn">Edit Review</button>
+                <button class="delete-btn" id="deleteBtn">Delete Review</button>
+            </div>
+
+            <div class="review-form-card" id="reviewFormArea" style="display:none; margin-top:14px;">
+                <form id="reviewForm">
+                    <div id="starPicker">
+                        <span class="star" data-value="1">&#9733;</span>
+                        <span class="star" data-value="2">&#9733;</span>
+                        <span class="star" data-value="3">&#9733;</span>
+                        <span class="star" data-value="4">&#9733;</span>
+                        <span class="star" data-value="5">&#9733;</span>
+                    </div>
+                    <textarea id="commentInput" placeholder="Share your experience with IUEX Globe.Net..."></textarea>
+                    <div class="form-error" id="formError"></div>
+                    <button type="submit" class="cta-btn" id="submitReviewBtn">Submit Review</button>
+                    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="reviews-list" id="reviewsList">
+            <div class="reviews-empty">Loading reviews...</div>
+        </div>
+
+    </div>
+
+    <script src="js/reviews.js"></script>
+    <script src="js/auth-gate.js"></script>
+    <script src="js/session.js"></script>
+
+</body>
+</html>

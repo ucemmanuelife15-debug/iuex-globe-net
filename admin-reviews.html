@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Reviews - IUEX Globe.Net Admin</title>
+   <link rel="stylesheet" href="css/responsive.css">
+<style>
+  :root {
+    --primary-blue: #0B4F9C;
+    --electric-blue: #12A8F5;
+    --bright-green: #22C55E;
+    --white: #FFFFFF;
+    --light-gray: #F5F7FA;
+    --charcoal: #222831;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--light-gray);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  .top-bar { padding: 20px 30px; }
+  .back-link {
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(11, 79, 156, 0.08);
+    color: var(--primary-blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  h1 { font-size: 24px; margin-bottom: 8px; color: var(--primary-blue); }
+  p.sub { color: #667; font-size: 14px; margin-bottom: 20px; }
+
+  .locked-card { text-align: center; padding: 40px 20px; background: var(--white); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .locked-card p { margin-bottom: 20px; color: #667; }
+
+  .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+  .tab-btn {
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid #d0d7e2;
+    background: var(--white);
+    color: var(--charcoal);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tab-btn.active { background: var(--primary-blue); color: var(--white); border-color: var(--primary-blue); }
+
+  .review-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 16px;
+  }
+  .review-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .review-name { font-weight: 600; font-size: 14px; }
+  .review-email { font-size: 12px; color: #8899aa; }
+  .review-date { font-size: 12px; color: #8899aa; }
+  .star-display { color: #d0d7e2; font-size: 1rem; }
+  .star-display.filled { color: #f5a623; }
+  .review-comment { font-size: 14px; margin: 10px 0 14px; line-height: 1.5; }
+
+  .review-actions { display: flex; gap: 10px; }
+  .review-actions button {
+    padding: 8px 16px;
+    font-size: 13px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .approve-btn { background: var(--bright-green); color: var(--white); }
+  .approve-btn:hover { background: #1ea854; }
+  .remove-btn { background: #e5484d; color: var(--white); }
+  .remove-btn:hover { background: #c93c40; }
+
+  .status-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+  }
+  .status-pending { background: rgba(245,166,35,0.12); color: #c98314; }
+  .status-live { background: rgba(34,197,94,0.12); color: var(--bright-green); }
+
+  .empty-state { text-align: center; padding: 30px 10px; color: #8899aa; font-size: 14px; }
+  .loading-note { text-align: center; padding: 20px 10px; color: #8899aa; font-size: 13px; }
+</style>
+</head>
+<body class="page-admin-reviews">
+
+<div class="top-bar">
+  <a href="admin-dashboard.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+</div>
+
+<div class="container">
+
+  <div id="lockedSection" style="display:none;">
+    <div class="locked-card">
+      <h1>Access Restricted</h1>
+      <p class="sub">This area is only available to IUEX Globe.Net admins.</p>
+      <a href="index.html" class="back-link">Return to Home</a>
+    </div>
+  </div>
+
+  <div id="panelSection" style="display:none;">
+    <span class="badge">ADMIN</span>
+    <h1>Manage Reviews</h1>
+    <p class="sub">Approve pending reviews, or remove any review that's already live.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tabPending" onclick="showTab('pending')">Pending</button>
+      <button class="tab-btn" id="tabAll" onclick="showTab('all')">All Reviews</button>
+    </div>
+
+    <div id="reviewList">
+      <div class="loading-note">Loading... (first load after inactivity can take up to a minute)</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const REVIEWS_API = "https://iuex-globe-net-backend.onrender.com/api/reviews";
+  let currentTab = "pending";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const savedAccount = JSON.parse(localStorage.getItem("userAccount") || "null");
+
+    if (!isLoggedIn || !savedAccount || !savedAccount.isAdmin) {
+      document.getElementById("lockedSection").style.display = "block";
+      return;
+    }
+
+    document.getElementById("panelSection").style.display = "block";
+    loadReviews();
+  });
+
+  function showTab(tab) {
+    currentTab = tab;
+    document.getElementById("tabPending").classList.toggle("active", tab === "pending");
+    document.getElementById("tabAll").classList.toggle("active", tab === "all");
+    loadReviews();
+  }
+
+  function starsDisplay(rating) {
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+      html += `<span class="star-display${i <= rating ? " filled" : ""}">&#9733;</span>`;
+    }
+    return html;
+  }
+
+  async function loadReviews() {
+    const reviewList = document.getElementById("reviewList");
+    reviewList.innerHTML = '<div class="loading-note">Loading...</div>';
+    try {
+      const token = localStorage.getItem("authToken");
+      const endpoint = currentTab === "pending" ? "pending" : "all";
+      const res = await fetch(`${REVIEWS_API}/${endpoint}`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const reviews = await res.json();
+      renderReviews(reviews);
+    } catch (err) {
+      reviewList.innerHTML = '<div class="empty-state">Could not load reviews.</div>';
+    }
+  }
+
+  function renderReviews(reviews) {
+    const reviewList = document.getElementById("reviewList");
+    if (!reviews.length) {
+      reviewList.innerHTML = `<div class="empty-state">No ${currentTab === "pending" ? "pending" : ""} reviews ${currentTab === "pending" ? "right now" : "found"}.</div>`;
+      return;
+    }
+
+    reviewList.innerHTML = reviews.map((r) => {
+      const user = r.userId || {};
+      const name = user.fullname || "Unknown user";
+      const email = user.email || "";
+      const date = new Date(r.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+      const statusTag = r.status === "approved"
+        ? '<span class="status-tag status-live">Live</span>'
+        : '<span class="status-tag status-pending">Pending</span>';
+
+      const approveBtn = r.status === "pending"
+        ? `<button class="approve-btn" id="approve-${r._id}" onclick="approveReview('${r._id}')">Approve</button>`
+        : "";
+
+      return `
+        <div class="review-card">
+          <div class="review-top">
+            <div>
+              <div class="review-name">${name} ${statusTag}</div>
+              <div class="review-email">${email}</div>
+            </div>
+            <div class="review-date">${date}</div>
+          </div>
+          <div class="review-stars">${starsDisplay(r.rating)}</div>
+          <p class="review-comment">${r.comment}</p>
+          <div class="review-actions">
+            ${approveBtn}
+            <button class="remove-btn" id="remove-${r._id}" onclick="removeReview('${r._id}')">Remove</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function approveReview(id) {
+    const btn = document.getElementById(`approve-${id}`);
+    if (btn) { btn.disabled = true; btn.textContent = "Please wait..."; }
+    try {
+      const token = localStorage.getItem("authToken");
+      await fetch(`${REVIEWS_API}/${id}/approve`, {
+        method: "PUT",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      loadReviews();
+    } catch (err) {
+      alert("Could not approve review. Try again.");
+      if (btn) { btn.disabled = false; btn.textContent = "Approve"; }
+    }
+  }
+
+  async function removeReview(id) {
+    if (!confirm("Remove this review? This can't be undone.")) return;
+    const btn = document.getElementById(`remove-${id}`);
+    if (btn) { btn.disabled = true; btn.textContent = "Please wait..."; }
+    try {
+      const token = localStorage.getItem("authToken");
+      await fetch(`${REVIEWS_API}/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      loadReviews();
+    } catch (err) {
+      alert("Could not remove review. Try again.");
+      if (btn) { btn.disabled = false; btn.textContent = "Remove"; }
+    }
+  }
+</script>
+<script src="js/auth-gate.js"></script>
+<script src="js/session.js"></script>
+
+</body>
+</html>

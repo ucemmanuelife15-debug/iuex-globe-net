@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
 const gameRoutes = require("./routes/game");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.use(express.json({ limit: '5mb' }));
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/game", gameRoutes);
+app.use("/api/reviews", reviewRoutes);
 app.post("/api/test", (req, res) => {
   res.json({ message: "Test route works!" });
 });
