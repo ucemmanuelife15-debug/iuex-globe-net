@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/home-nav-hero.css">
     <style>
         .home-reviews-section {
             padding: 60px 40px;
@@ -57,7 +58,7 @@
 
 </head>
 
-<body>
+<body class="page-home">
 
     <!-- ===========================
      HEADER / NAVIGATION
@@ -82,13 +83,22 @@
 </a>
 
        <ul class="nav-links">
-    <li><a href="#home" class="active">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#products">Products</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#news">News</a></li>
-    <li><a href="#reviews-preview">Reviews</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li class="nav-primary keep-mobile"><a href="#home" data-nav="home" class="active">Home</a></li>
+    <li class="nav-primary"><a href="products.html" data-nav="products">Products</a></li>
+    <li class="nav-primary"><a href="courses.html" data-nav="academy">Academy</a></li>
+    <li class="nav-primary"><a href="events.html" data-nav="events">Events</a></li>
+    <li class="nav-primary"><a href="store.html" data-nav="store">Store</a></li>
+    <li class="nav-primary"><a href="game.html" data-nav="game">Game</a></li>
+    <li class="nav-primary"><a href="community.html" data-nav="community">Community</a></li>
+    <li class="nav-primary keep-mobile contact-li"><a href="#contact" data-nav="contact">Contact</a></li>
+    <li class="nav-more">
+        <button type="button" class="more-toggle" aria-haspopup="true">More &#9662;</button>
+        <ul class="more-menu">
+            <li><a href="#about" data-nav="about">About Us</a></li>
+            <li><a href="#news" data-nav="news">News</a></li>
+            <li><a href="#reviews-preview" data-nav="reviews">Reviews</a></li>
+        </ul>
+    </li>
 </ul>
 
      <div class="nav-actions">
@@ -122,9 +132,13 @@
 <div class="mobile-breadcrumb" id="mobileBreadcrumb">
     <div class="crumb-row"><span class="crumb-home">Home</span></div>
     <div class="quicklinks-row">
-        <a href="products.html" class="quick-products">Products</a>
-        <a href="game.html" class="quick-game">Game</a>
-        <a href="community.html" class="quick-community">Community</a>
+        <a href="#home" class="qn" data-nav="home">Home</a>
+        <a href="products.html" class="qn" data-nav="products">Products</a>
+        <a href="courses.html" class="qn" data-nav="academy">Academy</a>
+        <a href="events.html" class="qn" data-nav="events">Events</a>
+        <a href="store.html" class="qn" data-nav="store">Store</a>
+        <a href="game.html" class="qn" data-nav="game">Game</a>
+        <a href="community.html" class="qn" data-nav="community">Community</a>
     </div>
 </div>
 
@@ -212,30 +226,31 @@
      HERO SECTION
 =========================== -->
 
-<section class="hero" id="home">
+<section class="hero hero-v2" id="home" data-spy="home">
 
-    <div class="hero-content">
-
-        <h1>Shaping the Future Through Technology</h1>
-
+    <div class="hero-intro">
+        <span class="hero-tag">IUEX GLOBE.NET</span>
+        <h1>Smart Gadgets, Graphic Design, Events &amp; Technology &mdash; All in One Place</h1>
         <p>
-            IUEX Globe.Net builds innovative digital solutions that connect
-            people, businesses, and opportunities through technology.
+            We sell quality laptops and smartphones, design logos, flyers and brands,
+            plan weddings and events, build apps, and train people in tech skills.
         </p>
+        <div class="hero-slider" id="heroSlider" aria-roledescription="carousel" aria-label="What we do">
 
-        <div class="hero-buttons">
+        <!-- Slides are built from js/hero-slides.js (edit that file to change them) -->
+        <div class="hero-slides" id="heroSlides"></div>
 
-                       <a href="#products" class="primary-btn" id="exploreProductsBtn" onclick="return gateClick(event, this)">Explore Products</a>
-            <a href="about.html" class="secondary-btn" onclick="return gateClick(event, this)">Learn More</a>
-
-        </div>
-
+        <button type="button" class="hero-arrow prev" aria-label="Previous slide">&#8249;</button>
+        <button type="button" class="hero-arrow next" aria-label="Next slide">&#8250;</button>
+        <div class="hero-dots"></div>
     </div>
-
-    <div class="hero-image">
-
-        <img src="images/Hero/Hero.png" alt="Technology Illustration">
-
+        <div class="hero-chips">
+            <a href="store.html">Gadgets Store</a>
+            <a href="events.html">Events</a>
+            <a href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I%20would%20like%20to%20request%20a%20graphic%20design." target="_blank" rel="noopener">Graphic Design</a>
+            <a href="products.html">Apps</a>
+            <a href="courses.html">Tech Academy</a>
+        </div>
     </div>
 
 </section>
@@ -243,7 +258,7 @@
      ABOUT SECTION
 =========================== -->
 
-<section class="about" id="about">
+<section class="about" id="about" data-spy="about">
     <div class="about-container">
 
         <div class="about-content">
@@ -282,9 +297,9 @@
 
         <div class="about-image">
 
-            <div class="image-placeholder">
+            <div>
 
-                <img src="images/About/file_00000000ce1c81f59ab02e7b4c56fe41.png" alt="About Illustration">
+                <img src="images/Hero/supportive.jpg" alt="About Illustration">
 
             </div>
 
@@ -297,7 +312,7 @@
      PRODUCTS SECTION
 =========================== -->
 
-<section class="products" id="products">
+<section class="products" id="products" data-spy="products">
 
     <div class="products-header">
 
@@ -362,7 +377,7 @@
      SERVICES SECTION
 =========================== -->
 
-<section class="services" id="services">
+<section class="services" id="services" data-spy="academy">
     <div class="services-header">
 
         <span class="section-tag">OUR SERVICES</span>
@@ -377,6 +392,7 @@
 
     </div>
 
+    <img src="images/Icons/academy.JPG.jpg" alt="Programming Classes">
     <div class="services-grid">
 
         <div class="service-card">
@@ -746,7 +762,6 @@ We put customers at the center of everything we do.
             <h4>Supportive Community</h4>
             <p>Learn with peers, mentors, and a growing tech community.</p>
         </a>
-
     </div>
 
 </section>
@@ -754,10 +769,15 @@ We put customers at the center of everything we do.
      SPOTLIGHT SHOWCASE
 =========================== -->
 
-<section class="spotlight-section">
+<section class="spotlight-section" data-spy="game community">
 
     <div class="spotlight-grid">
 
+      <div>
+
+                <img src="images/Hero/supportive.jpg" alt="suppotive community icon">
+
+            </div>
         <a href="community.html" class="spotlight-card community-spotlight" onclick="return gateClick(event, this)">
             <div class="spotlight-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -818,7 +838,7 @@ We put customers at the center of everything we do.
     </div>
 
 </section>
-<section id="news" class="news-section">
+<section id="news" class="news-section" data-spy="news">
   <div class="container">
     <span class="section-tag">LATEST UPDATES</span>
     <h2 class="section-heading">News & Announcements</h2>
@@ -842,7 +862,7 @@ We put customers at the center of everything we do.
      REVIEWS PREVIEW SECTION
 =========================== -->
 
-<section id="reviews-preview" class="home-reviews-section">
+<section id="reviews-preview" class="home-reviews-section" data-spy="reviews">
     <div class="home-reviews-header">
         <span class="section-tag">WHAT PEOPLE ARE SAYING</span>
         <h2>Reviews From Our Community</h2>
@@ -867,7 +887,7 @@ We put customers at the center of everything we do.
      FOOTER SECTION
 =========================== -->
 
-<footer class="footer" id="contact">
+<footer class="footer" id="contact" data-spy="contact">
 
     <div class="footer-container">
 
@@ -985,6 +1005,8 @@ We put customers at the center of everything we do.
 <script src="js/news.js"></script>
 <script src="js/navbar.js"></script>
 <script src="js/script.js"></script>
+<script src="js/hero-slides.js"></script>
+<script src="js/nav-hero.js"></script>
 <script src="js/auth-gate.js"></script>
 <script src="js/session.js"></script>
 <script>
