@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events &amp; Weddings - IUEX Globe.Net</title>
+<link rel="stylesheet" href="css/variables.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    color: #222831;
+    min-height: 100vh;
+  }
+  .top-bar { padding: 20px 24px; }
+  .back-link { text-decoration: none; color: #0B4F9C; font-size: 14px; font-weight: 600; }
+  .back-link:hover { color: #12A8F5; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+  .page-head { text-align: center; margin: 10px auto 34px; max-width: 700px; }
+  .badge {
+    display: inline-block; background: rgba(11,79,156,.08); color: #0B4F9C;
+    font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .page-head h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); color: #0B4F9C; margin-bottom: 12px; line-height: 1.2; }
+  .page-head p { font-size: 15px; color: #55556b; line-height: 1.65; }
+
+  /* ---------- featured flyer ---------- */
+  .featured {
+    background: #fff; border-radius: 22px; padding: 22px;
+    box-shadow: 0 10px 40px rgba(11,79,156,.12);
+    display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 30px; align-items: center;
+    margin-bottom: 44px;
+  }
+  .featured .pic { background: #eef3fb; border-radius: 16px; overflow: hidden; }
+  .featured .pic img { width: 100%; display: block; object-fit: contain; }
+  .featured h2 { font-size: clamp(1.3rem, 3vw, 1.9rem); color: #0B4F9C; margin-bottom: 12px; line-height: 1.2; }
+  .featured p { font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
+
+  .btn {
+    display: inline-block; text-decoration: none; background: #22C55E; color: #fff;
+    font-weight: 700; font-size: 14px; padding: 13px 26px; border-radius: 50px;
+  }
+  .btn:hover { background: #16a34a; }
+
+  /* ---------- gallery ---------- */
+  .section-title { font-size: 1.3rem; color: #0B4F9C; margin-bottom: 6px; }
+  .section-sub { font-size: 14px; color: #55556b; margin-bottom: 20px; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+
+  .flyer { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 18px rgba(11,79,156,.08); }
+  .flyer .pic { background: #eef3fb; aspect-ratio: 3 / 4; }
+  .flyer .pic img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .flyer .cap { padding: 12px 14px; font-size: 13px; font-weight: 600; color: #222831; }
+
+  /* empty reserved slot */
+  .flyer.empty { box-shadow: none; border: 2px dashed #c5d2e6; background: transparent; }
+  .flyer.empty .pic {
+    background: transparent; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 16px; color: #8a97ab; font-size: 13px; font-weight: 600;
+  }
+  .flyer.empty .cap { color: #8a97ab; font-weight: 500; }
+
+  .cta-band {
+    margin-top: 44px; background: linear-gradient(135deg, #0B4F9C 0%, #12A8F5 100%);
+    border-radius: 22px; padding: 34px 24px; text-align: center; color: #fff;
+  }
+  .cta-band h2 { font-size: 1.4rem; margin-bottom: 8px; }
+  .cta-band p { font-size: 14px; opacity: .92; margin-bottom: 18px; }
+  .cta-band .btn { background: #fff; color: #0B4F9C; }
+
+  @media (max-width: 768px) {
+    .featured { grid-template-columns: 1fr; gap: 18px; padding: 14px; }
+    .gallery { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .featured .btn { display: block; text-align: center; }
+  }
+</style>
+</head>
+<body class="page-events">
+
+<div class="top-bar">
+  <a href="index.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+</div>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <span class="badge">WEDDINGS &amp; EVENTS</span>
+    <h1>Events planned from start to finish</h1>
+    <p>Weddings, ceremonies, birthdays and corporate events &mdash; plus flyers and adverts for the events we are running. Browse below, then message us to book.</p>
+  </div>
+
+  <!-- ===== FEATURED FLYER ===== -->
+  <section class="featured">
+    <div class="pic">
+      <img src="images/Hero/events.PNG.png" alt="Plan your wedding or ceremony with us">
+    </div>
+    <div>
+      <h2>Plan your wedding or ceremony with us</h2>
+      <p>From weddings and ceremonies to birthdays and corporate events, we take care of the planning so you can enjoy the day. Send us a message with your date and idea and we will get back to you.</p>
+      <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I%20would%20like%20to%20book%20an%20event.">Book on WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- ===== MORE FLYERS & ADVERTS ===== -->
+  <h2 class="section-title">Flyers &amp; Adverts</h2>
+  <p class="section-sub">New event flyers and adverts will appear here.</p>
+
+  <!--
+    HOW TO ADD A FLYER:
+    1. Save the flyer image in the images/Events/ folder (create the folder if it is not there), e.g. images/Events/flyer2.jpg
+    2. Find one empty slot below (class="flyer empty") and replace the whole block with this:
+
+       <div class="flyer">
+         <div class="pic"><img src="images/Events/flyer2.jpg" alt="Flyer name"></div>
+         <div class="cap">Flyer name or date</div>
+       </div>
+
+    3. Need more slots? Copy any block and paste it below the last one.
+  -->
+
+  <div class="gallery">
+
+    <!-- Flyer 1 (the one we have now) -->
+    <div class="flyer">
+      <div class="pic"><img src="images/Hero/events.PNG.png" alt="Wedding and ceremony planning flyer"></div>
+      <div class="cap">Wedding &amp; ceremony planning</div>
+    </div>
+
+    <!-- Reserved slots -->
+    <div class="flyer empty"><div class="pic">Next flyer goes here</div><div class="cap">Coming soon</div></div>
+    <div class="flyer empty"><div class="pic">Next flyer goes here</div><div class="cap">Coming soon</div></div>
+    <div class="flyer empty"><div class="pic">Next flyer goes here</div><div class="cap">Coming soon</div></div>
+    <div class="flyer empty"><div class="pic">Next flyer goes here</div><div class="cap">Coming soon</div></div>
+    <div class="flyer empty"><div class="pic">Next flyer goes here</div><div class="cap">Coming soon</div></div>
+
+  </div>
+
+  <div class="cta-band">
+    <h2>Have an event in mind?</h2>
+    <p>Tell us the date, the place and what you have in mind.</p>
+    <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I%20would%20like%20to%20book%20an%20event.">Message us on WhatsApp</a>
+  </div>
+
+</div>
+
+</body>
+</html>
