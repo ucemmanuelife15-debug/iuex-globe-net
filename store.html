@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadgets Store - IUEX Globe.Net</title>
+<link rel="stylesheet" href="css/variables.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    color: #222831;
+    min-height: 100vh;
+  }
+  .top-bar { padding: 20px 24px; }
+  .back-link { text-decoration: none; color: #0B4F9C; font-size: 14px; font-weight: 600; }
+  .back-link:hover { color: #12A8F5; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+  .page-head { text-align: center; margin: 10px auto 34px; max-width: 680px; }
+  .badge {
+    display: inline-block; background: rgba(11,79,156,.08); color: #0B4F9C;
+    font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .page-head h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); color: #0B4F9C; margin-bottom: 12px; line-height: 1.2; }
+  .page-head p { font-size: 15px; color: #55556b; line-height: 1.65; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+
+  .card {
+    background: #fff; border-radius: 18px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(11,79,156,.08);
+    display: flex; flex-direction: column;
+  }
+  .card-img { aspect-ratio: 1.2 / 1; background: #eef3fb; display: block; overflow: hidden; }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-missing {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 16px; color: #6b7a8c; font-size: 13px; font-weight: 600;
+    background: linear-gradient(135deg, #1f2937 0%, #475569 100%); color: #fff;
+  }
+  .card-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card-body h2 { font-size: 1.1rem; color: #0B4F9C; }
+  .price { font-size: .9rem; font-weight: 700; color: #15803D; }
+
+  .spec-list {
+    list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 7px;
+  }
+  .spec-list li {
+    font-size: .78rem; font-weight: 600; background: #f5f7fa;
+    border-radius: 9px; padding: 7px 9px;
+  }
+  .spec-list li small {
+    display: block; font-size: .62rem; letter-spacing: .04em;
+    text-transform: uppercase; color: #6b7a8c; margin-bottom: 1px;
+  }
+
+  .btn {
+    margin-top: auto; display: block; text-align: center; text-decoration: none;
+    background: #22C55E; color: #fff; font-weight: 700; font-size: 14px;
+    padding: 12px; border-radius: 50px;
+  }
+  .btn:hover { background: #16a34a; }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="page-store">
+
+<div class="top-bar">
+  <a href="index.html" class="back-link" onclick="history.back(); return false;">&larr; Back</a>
+</div>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <span class="badge">GADGETS STORE</span>
+    <h1>Quality laptops, ready for you</h1>
+    <p>Browse our available laptops below. Tap the WhatsApp button on any laptop to ask for the price and availability.</p>
+  </div>
+
+  <!--
+    HOW TO EDIT A PRODUCT:
+    - Photo: change the number in  images/icons/N.jpg  (if your file is a .png, the page tries .png automatically)
+    - Name:  change the text inside <h2>
+    - Price: change "Message for price" when you are ready
+    - Specs: edit the <li> lines
+    HOW TO ADD A PRODUCT: copy one whole <article class="card"> ... </article> block and paste it below the last one.
+  -->
+
+  <div class="grid">
+
+    <!-- ===== LAPTOP 1 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/1.jpg" alt="Laptop 1" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 1</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%201.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 2 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/2.jpg" alt="Laptop 2" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 2</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%202.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 3 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/3.jpg" alt="Laptop 3" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 3</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%203.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 4 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/4.jpg" alt="Laptop 4" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 4</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%204.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 5 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/5.jpg" alt="Laptop 5" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 5</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%205.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 6 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/6.jpg" alt="Laptop 6" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 6</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%206.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 7 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/7.jpg" alt="Laptop 7" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 7</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%207.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 8 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/8.jpg" alt="Laptop 8" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 8</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%208.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+    <!-- ===== LAPTOP 9 ===== -->
+    <article class="card">
+      <div class="card-img"><img src="images/icons/9.jpg" alt="Laptop 9" loading="lazy" onerror="imgFix(this)"></div>
+      <div class="card-body">
+        <h2>Laptop 9</h2>
+        <span class="price">Message for price</span>
+        <ul class="spec-list">
+          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
+          <li><small>Memory</small>16GB RAM</li>
+          <li><small>Storage</small>256GB SSD</li>
+          <li><small>Graphics</small>Intel Iris Xe</li>
+          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
+          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
+        </ul>
+        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%209.">Inquire on WhatsApp</a>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<script>
+  // If a photo is a .png (or .jpeg) instead of .jpg, try those automatically.
+  // If none exist, show a plain placeholder instead of a broken image.
+  function imgFix(img) {
+    var tries = (img.dataset.tries || "").split(",").filter(Boolean);
+    var exts = [".png", ".jpeg", ".JPG", ".PNG"];
+    var next = exts.find(function (e) { return tries.indexOf(e) === -1; });
+    if (next) {
+      tries.push(next);
+      img.dataset.tries = tries.join(",");
+      img.src = img.src.replace(/\.(jpg|png|jpeg)$/i, next);
+    } else {
+      img.onerror = null;
+      var d = document.createElement("div");
+      d.className = "img-missing";
+      d.textContent = "Photo coming soon";
+      img.parentNode.replaceChild(d, img);
+    }
+  }
+</script>
+
+</body>
+</html>
