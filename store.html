@@ -13,59 +13,80 @@
     color: #222831;
     min-height: 100vh;
   }
-  .top-bar { padding: 20px 24px; }
+  .top-bar { padding: 16px 18px 6px; }
   .back-link { text-decoration: none; color: #0B4F9C; font-size: 14px; font-weight: 600; }
   .back-link:hover { color: #12A8F5; }
 
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
-  .page-head { text-align: center; margin: 10px auto 34px; max-width: 680px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 12px 50px; }
+  .page-head { text-align: center; margin: 6px auto 16px; max-width: 640px; }
   .badge {
     display: inline-block; background: rgba(11,79,156,.08); color: #0B4F9C;
-    font-size: 12px; font-weight: 700; letter-spacing: .08em;
-    padding: 6px 16px; border-radius: 20px; margin-bottom: 14px;
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 10px;
   }
-  .page-head h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); color: #0B4F9C; margin-bottom: 12px; line-height: 1.2; }
-  .page-head p { font-size: 15px; color: #55556b; line-height: 1.65; }
+  .page-head h1 { font-size: clamp(1.3rem, 5vw, 2rem); color: #0B4F9C; margin-bottom: 6px; line-height: 1.2; }
+  .page-head p { font-size: 13px; color: #55556b; line-height: 1.5; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+  /* ---------- search ---------- */
+  .search-box { position: relative; max-width: 560px; margin: 0 auto 12px; }
+  .search-box input {
+    width: 100%; padding: 13px 16px 13px 42px; font-size: 15px;
+    border: 1.5px solid #d3dcec; border-radius: 50px; background: #fff;
+    font-family: inherit; color: #222831; outline: none;
+  }
+  .search-box input:focus { border-color: #0B4F9C; box-shadow: 0 0 0 3px rgba(11,79,156,.12); }
+  .search-box svg {
+    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; color: #6b7a8c; pointer-events: none;
+  }
+  .chips { display: flex; gap: 7px; overflow-x: auto; padding: 2px 2px 10px; margin-bottom: 6px; scrollbar-width: none; justify-content: center; flex-wrap: wrap; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    border: 1.5px solid rgba(11,79,156,.25); background: #fff; color: #0B4F9C;
+    font-size: 12px; font-weight: 600; padding: 6px 13px; border-radius: 999px;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .chip.on { background: #0B4F9C; color: #fff; border-color: #0B4F9C; }
+  .count { text-align: center; font-size: 12px; color: #8a97ab; margin-bottom: 12px; }
+
+  /* ---------- compact product grid ---------- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 
   .card {
-    background: #fff; border-radius: 18px; overflow: hidden;
-    box-shadow: 0 4px 20px rgba(11,79,156,.08);
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(11,79,156,.08);
     display: flex; flex-direction: column;
   }
-  .card-img { aspect-ratio: 1.2 / 1; background: #eef3fb; display: block; overflow: hidden; }
+  .card-img { aspect-ratio: 4 / 3; background: #eef3fb; overflow: hidden; }
   .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .img-missing {
     width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-    text-align: center; padding: 16px; color: #6b7a8c; font-size: 13px; font-weight: 600;
-    background: linear-gradient(135deg, #1f2937 0%, #475569 100%); color: #fff;
+    text-align: center; padding: 8px; font-size: 11px; font-weight: 600; color: #fff;
+    background: linear-gradient(135deg, #1f2937 0%, #475569 100%);
   }
-  .card-body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-  .card-body h2 { font-size: 1.1rem; color: #0B4F9C; }
-  .price { font-size: .9rem; font-weight: 700; color: #15803D; }
+  .card-body { padding: 8px 9px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+  .cat { font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #15803D; }
+  .card-body h2 { font-size: .85rem; color: #0B4F9C; line-height: 1.25; }
+  .price { font-size: .72rem; font-weight: 700; color: #15803D; }
 
-  .spec-list {
-    list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 7px;
-  }
-  .spec-list li {
-    font-size: .78rem; font-weight: 600; background: #f5f7fa;
-    border-radius: 9px; padding: 7px 9px;
-  }
-  .spec-list li small {
-    display: block; font-size: .62rem; letter-spacing: .04em;
-    text-transform: uppercase; color: #6b7a8c; margin-bottom: 1px;
-  }
+  .specs { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .specs li { font-size: 10.5px; line-height: 1.3; color: #444b57; }
+  .specs li b { color: #6b7a8c; font-weight: 700; }
 
   .btn {
     margin-top: auto; display: block; text-align: center; text-decoration: none;
-    background: #22C55E; color: #fff; font-weight: 700; font-size: 14px;
-    padding: 12px; border-radius: 50px;
+    background: #22C55E; color: #fff; font-weight: 700; font-size: 11.5px;
+    padding: 8px 6px; border-radius: 50px;
   }
   .btn:hover { background: #16a34a; }
 
-  @media (max-width: 480px) {
-    .grid { grid-template-columns: 1fr; }
+  .empty { grid-column: 1 / -1; text-align: center; padding: 30px 10px; color: #55556b; font-size: 14px; line-height: 1.6; }
+  .empty a { color: #15803D; font-weight: 700; }
+
+  @media (min-width: 700px) {
+    .grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+    .card-body h2 { font-size: .95rem; }
+    .specs li { font-size: 11.5px; }
   }
 </style>
 </head>
@@ -79,205 +100,147 @@
 
   <div class="page-head">
     <span class="badge">GADGETS STORE</span>
-    <h1>Quality laptops, ready for you</h1>
-    <p>Browse our available laptops below. Tap the WhatsApp button on any laptop to ask for the price and availability.</p>
+    <h1>Laptops, phones, printers &amp; more</h1>
+    <p>Search for any gadget. Tap WhatsApp on a product to ask for the price and availability.</p>
   </div>
 
-  <!--
-    HOW TO EDIT A PRODUCT:
-    - Photo: change the number in  images/icons/N.jpg  (if your file is a .png, the page tries .png automatically)
-    - Name:  change the text inside <h2>
-    - Price: change "Message for price" when you are ready
-    - Specs: edit the <li> lines
-    HOW TO ADD A PRODUCT: copy one whole <article class="card"> ... </article> block and paste it below the last one.
-  -->
-
-  <div class="grid">
-
-    <!-- ===== LAPTOP 1 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/1.jpg" alt="Laptop 1" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 1</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%201.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 2 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/2.jpg" alt="Laptop 2" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 2</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%202.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 3 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/3.jpg" alt="Laptop 3" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 3</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%203.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 4 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/4.jpg" alt="Laptop 4" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 4</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%204.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 5 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/5.jpg" alt="Laptop 5" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 5</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%205.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 6 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/6.jpg" alt="Laptop 6" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 6</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%206.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 7 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/7.jpg" alt="Laptop 7" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 7</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%207.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 8 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/8.jpg" alt="Laptop 8" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 8</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%208.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
-    <!-- ===== LAPTOP 9 ===== -->
-    <article class="card">
-      <div class="card-img"><img src="images/icons/9.jpg" alt="Laptop 9" loading="lazy" onerror="imgFix(this)"></div>
-      <div class="card-body">
-        <h2>Laptop 9</h2>
-        <span class="price">Message for price</span>
-        <ul class="spec-list">
-          <li><small>Processor</small>Intel Core i7, 11th Gen</li>
-          <li><small>Memory</small>16GB RAM</li>
-          <li><small>Storage</small>256GB SSD</li>
-          <li><small>Graphics</small>Intel Iris Xe</li>
-          <li><small>Comfort</small>Backlit keyboard &amp; webcam</li>
-          <li><small>Access</small>Touchscreen &amp; fingerprint</li>
-        </ul>
-        <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I'm%20interested%20in%20Laptop%209.">Inquire on WhatsApp</a>
-      </div>
-    </article>
-
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+    <input type="search" id="q" placeholder="Search laptop, phone, printer..." autocomplete="off">
   </div>
+  <div class="chips" id="chips"></div>
+  <div class="count" id="count"></div>
+
+  <div class="grid" id="grid"></div>
 </div>
 
 <script>
-  // If a photo is a .png (or .jpeg) instead of .jpg, try those automatically.
-  // If none exist, show a plain placeholder instead of a broken image.
-  function imgFix(img) {
-    var tries = (img.dataset.tries || "").split(",").filter(Boolean);
-    var exts = [".png", ".jpeg", ".JPG", ".PNG"];
-    var next = exts.find(function (e) { return tries.indexOf(e) === -1; });
-    if (next) {
-      tries.push(next);
-      img.dataset.tries = tries.join(",");
-      img.src = img.src.replace(/\.(jpg|png|jpeg)$/i, next);
-    } else {
-      img.onerror = null;
-      var d = document.createElement("div");
-      d.className = "img-missing";
-      d.textContent = "Photo coming soon";
-      img.parentNode.replaceChild(d, img);
-    }
+/* =====================================================================
+   YOUR PRODUCTS — this is the ONLY part you edit.
+   One block per product. To add one, copy a block { ... }, and paste it
+   after the last one (keep the comma between blocks).
+
+   cat    = category (Laptop, Phone, Printer, Accessory ... new ones appear
+            automatically as filter buttons)
+   img    = photo file inside the images/Icons/ folder
+   price  = text shown as the price
+   specs  = lines shown under the photo, written as "Label: value"
+   ===================================================================== */
+var PHONE = "2349015045558";
+var IMG_FOLDER = "images/Icons/";
+
+// The specs below are placeholders (the HP EliteBook specs).
+// Replace them for each product with the real specs from its photo.
+var SPEC = [
+  "Processor: Intel Core i7, 11th Gen",
+  "Memory: 16GB RAM",
+  "Storage: 256GB SSD",
+  "Graphics: Intel Iris Xe",
+  "Comfort: Backlit keyboard & webcam",
+  "Access: Touchscreen & fingerprint"
+];
+
+var PRODUCTS = [
+  { cat: "Laptop", name: "Laptop 1", img: "1 (2).jpg", price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 2", img: "2.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 3", img: "3.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 4", img: "4.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 5", img: "5.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 6", img: "6.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 7", img: "7.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 8", img: "8.jpg",     price: "Message for price", specs: SPEC },
+  { cat: "Laptop", name: "Laptop 9", img: "9.jpg",     price: "Message for price", specs: SPEC }
+];
+
+/* ===================== below here: no need to edit ===================== */
+var grid = document.getElementById("grid");
+var q = document.getElementById("q");
+var chipsBox = document.getElementById("chips");
+var countEl = document.getElementById("count");
+var activeCat = "All";
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function specHtml(line) {
+  var i = line.indexOf(": ");
+  if (i > 0) return "<li><b>" + esc(line.slice(0, i)) + ":</b> " + esc(line.slice(i + 2)) + "</li>";
+  return "<li>" + esc(line) + "</li>";
+}
+
+function card(p) {
+  var msg = encodeURIComponent("Hello IUEX Globe.Net, I'm interested in " + p.name + ".");
+  return '<article class="card">' +
+    '<div class="card-img"><img src="' + encodeURI(IMG_FOLDER + p.img) + '" alt="' + esc(p.name) + '" loading="lazy" onerror="imgFix(this)"></div>' +
+    '<div class="card-body">' +
+      '<span class="cat">' + esc(p.cat) + '</span>' +
+      '<h2>' + esc(p.name) + '</h2>' +
+      '<span class="price">' + esc(p.price) + '</span>' +
+      '<ul class="specs">' + (p.specs || []).map(specHtml).join("") + '</ul>' +
+      '<a class="btn" target="_blank" rel="noopener" href="https://wa.me/' + PHONE + '?text=' + msg + '">Inquire on WhatsApp</a>' +
+    '</div></article>';
+}
+
+function render() {
+  var term = q.value.trim().toLowerCase();
+  var list = PRODUCTS.filter(function (p) {
+    if (activeCat !== "All" && p.cat !== activeCat) return false;
+    if (!term) return true;
+    var hay = (p.name + " " + p.cat + " " + (p.specs || []).join(" ")).toLowerCase();
+    return term.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1; });
+  });
+
+  if (!list.length) {
+    var ask = encodeURIComponent("Hello IUEX Globe.Net, do you have " + (q.value.trim() || "this gadget") + " available?");
+    grid.innerHTML = '<div class="empty">Nothing matches your search yet.<br>' +
+      '<a target="_blank" rel="noopener" href="https://wa.me/' + PHONE + '?text=' + ask + '">Ask us on WhatsApp if we can get it for you</a></div>';
+  } else {
+    grid.innerHTML = list.map(card).join("");
   }
+  countEl.textContent = list.length + " item" + (list.length === 1 ? "" : "s") + " found";
+}
+
+function buildChips() {
+  var cats = ["All"];
+  PRODUCTS.forEach(function (p) { if (cats.indexOf(p.cat) === -1) cats.push(p.cat); });
+  chipsBox.innerHTML = "";
+  if (cats.length < 3) { chipsBox.style.display = "none"; return; }
+  cats.forEach(function (c) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip" + (c === activeCat ? " on" : "");
+    b.textContent = c;
+    b.onclick = function () { activeCat = c; buildChips(); render(); };
+    chipsBox.appendChild(b);
+  });
+}
+
+// Photo safety net: tries .png/.jpeg and the lowercase "icons" folder before giving up.
+function imgFix(img) {
+  var step = parseInt(img.dataset.step || "0", 10);
+  var src = decodeURI(img.getAttribute("src"));
+  var tries = [
+    function (s) { return s.replace(/\.jpg$/i, ".png"); },
+    function (s) { return s.replace(/\.png$/i, ".jpeg"); },
+    function (s) { return s.replace(/\.jpeg$/i, ".jpg").replace("images/Icons/", "images/icons/"); },
+    function (s) { return s.replace(/\.jpg$/i, ".png"); }
+  ];
+  if (step < tries.length) {
+    img.dataset.step = step + 1;
+    img.src = encodeURI(tries[step](src));
+  } else {
+    img.onerror = null;
+    var d = document.createElement("div");
+    d.className = "img-missing";
+    d.textContent = "Photo coming soon";
+    img.parentNode.replaceChild(d, img);
+  }
+}
+
+q.addEventListener("input", render);
+buildChips();
+render();
 </script>
 
 </body>
