@@ -239,6 +239,20 @@ function imgFix(img) {
   }
 }
 
+
+/* ---- Sign-in gate: guests cannot open WhatsApp from this page ---- */
+document.addEventListener("click", function (e) {
+  var a = e.target.closest ? e.target.closest('a[href^="https://wa.me"]') : null;
+  if (!a) return;
+  var loggedIn = false;
+  try { loggedIn = localStorage.getItem("isLoggedIn") === "true"; } catch (err) {}
+  if (loggedIn) return;
+  e.preventDefault();
+  try { localStorage.setItem("redirectAfterAuth", location.pathname.split("/").pop() || "index.html"); } catch (err) {}
+  alert("Please sign up or sign in first, then you can message us on WhatsApp.");
+  window.location.href = "signup.html";
+});
+
 q.addEventListener("input", render);
 buildChips();
 render();

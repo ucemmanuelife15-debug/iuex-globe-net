@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events &amp; Weddings - IUEX Globe.Net</title>
+<title>Royal Touch Events - IUEX Globe.Net</title>
 <link rel="stylesheet" href="css/variables.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,6 +25,7 @@
     padding: 6px 16px; border-radius: 20px; margin-bottom: 14px;
   }
   .page-head h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); color: #0B4F9C; margin-bottom: 12px; line-height: 1.2; }
+  .page-head .tagline { font-size: clamp(1rem, 3.5vw, 1.25rem); color: #12A8F5; font-weight: 600; margin-bottom: 12px; }
   .page-head p { font-size: 15px; color: #55556b; line-height: 1.65; }
 
   /* ---------- featured flyer ---------- */
@@ -88,8 +89,9 @@
 
   <div class="page-head">
     <span class="badge">WEDDINGS &amp; EVENTS</span>
-    <h1>Events planned from start to finish</h1>
-    <p>Weddings, ceremonies, birthdays and corporate events &mdash; plus flyers and adverts for the events we are running. Browse below, then message us to book.</p>
+    <h1>Royal Touch Events</h1>
+    <h2 class="tagline">Event planner, from start to finish</h2>
+    <p>Royal Touch Events plans weddings, ceremonies, birthdays and corporate events &mdash; plus flyers and adverts for the events we are running. Browse below, then sign in to message us and book.</p>
   </div>
 
   <!-- ===== FEATURED FLYER ===== -->
@@ -98,9 +100,9 @@
       <img src="images/Hero/events.PNG.png" alt="Plan your wedding or ceremony with us">
     </div>
     <div>
-      <h2>Plan your wedding or ceremony with us</h2>
-      <p>From weddings and ceremonies to birthdays and corporate events, we take care of the planning so you can enjoy the day. Send us a message with your date and idea and we will get back to you.</p>
-      <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I%20would%20like%20to%20book%20an%20event.">Book on WhatsApp</a>
+      <h2>Plan your wedding or ceremony with Royal Touch Events</h2>
+      <p>From weddings and ceremonies to birthdays and corporate events, Royal Touch Events takes care of the planning so you can enjoy the day. Send us a message with your date and idea and we will get back to you.</p>
+      <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20Royal%20Touch%20Events%2C%20I%20would%20like%20to%20book%20an%20event.">Sign in to book on WhatsApp</a>
     </div>
   </section>
 
@@ -141,10 +143,25 @@
   <div class="cta-band">
     <h2>Have an event in mind?</h2>
     <p>Tell us the date, the place and what you have in mind.</p>
-    <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20IUEX%20Globe.Net%2C%20I%20would%20like%20to%20book%20an%20event.">Message us on WhatsApp</a>
+    <a class="btn" target="_blank" rel="noopener" href="https://wa.me/2349015045558?text=Hello%20Royal%20Touch%20Events%2C%20I%20would%20like%20to%20book%20an%20event.">Sign in to message us on WhatsApp</a>
   </div>
 
 </div>
+
+<script>
+/* ---- Sign-in gate: guests cannot open WhatsApp from this page ---- */
+document.addEventListener("click", function (e) {
+  var a = e.target.closest ? e.target.closest('a[href^="https://wa.me"]') : null;
+  if (!a) return;
+  var loggedIn = false;
+  try { loggedIn = localStorage.getItem("isLoggedIn") === "true"; } catch (err) {}
+  if (loggedIn) return;
+  e.preventDefault();
+  try { localStorage.setItem("redirectAfterAuth", location.pathname.split("/").pop() || "index.html"); } catch (err) {}
+  alert("Please sign up or sign in first, then you can message us on WhatsApp.");
+  window.location.href = "signup.html";
+});
+</script>
 
 </body>
 </html>
