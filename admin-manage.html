@@ -187,14 +187,6 @@
       <div id="loginError" class="error"></div>
      <div class="password-field">
     <input type="password" id="adminPassword" placeholder="Admin password" readonly onfocus="this.removeAttribute('readonly')">
-
-    <button
-        type="button"
-        class="password-toggle"
-        id="toggleAdminPassword"
-        aria-label="Show password">
-        👁️
-    </button>
 </div>
       <button id="unlockBtn" onclick="unlock()">Unlock</button>
     </div>
@@ -227,19 +219,6 @@
 </div>
 
 <script>
-  const toggleAdminPassword = document.getElementById("toggleAdminPassword");
-const adminPasswordInput = document.getElementById("adminPassword");
-
-toggleAdminPassword.addEventListener("click", () => {
-    const isHidden = adminPasswordInput.type === "password";
-
-    adminPasswordInput.type = isHidden ? "text" : "password";
-    toggleAdminPassword.textContent = isHidden ? "🙈" : "👁️";
-    toggleAdminPassword.setAttribute(
-        "aria-label",
-        isHidden ? "Hide password" : "Show password"
-    );
-});
   const API_BASE = "https://iuex-globe-net-backend.onrender.com/api/game";
   const AUTH_BASE = "https://iuex-globe-net-backend.onrender.com/api/auth";
   let allUsers = [];
