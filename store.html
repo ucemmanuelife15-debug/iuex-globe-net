@@ -122,35 +122,43 @@
 
    cat    = category (Laptop, Phone, Printer, Accessory ... new ones appear
             automatically as filter buttons)
-   img    = photo file inside the images/Icons/ folder
+   img    = photo file inside the images/Icons/ folder (or a full path like images/Hero/photo.jpg)
    price  = text shown as the price
    specs  = lines shown under the photo, written as "Label: value"
    ===================================================================== */
 var PHONE = "2349015045558";
 var IMG_FOLDER = "images/Icons/";
 
-// The specs below are placeholders (the HP EliteBook specs).
-// Replace them for each product with the real specs from its photo.
-var SPEC = [
-  "Processor: Intel Core i7, 11th Gen",
-  "Memory: 16GB RAM",
-  "Storage: 256GB SSD",
-  "Graphics: Intel Iris Xe",
-  "Comfort: Backlit keyboard & webcam",
-  "Access: Touchscreen & fingerprint"
-];
-
 var PRODUCTS = [
-  { cat: "Laptop", name: "Laptop 1", img: "1 (2).jpg", price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 2", img: "2.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 3", img: "3.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 4", img: "4.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 5", img: "5.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 6", img: "6.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 7", img: "7.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 8", img: "8.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "Laptop 9", img: "9.jpg",     price: "Message for price", specs: SPEC },
-  { cat: "Laptop", name: "HP EliteBook 1040 G8", img: "images/Hero/Store.JPG.jpg", price: "Message for price", specs: SPEC }
+  { cat: "Laptop", name: "Dell Latitude 5310", img: "1 (2).jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i5, 10th Gen", "Memory: 16GB RAM", "Storage: 256GB SSD", "Display: Touchscreen" ] },
+
+  { cat: "Laptop", name: "HP EliteBook Folio 1030 G3", img: "2.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i7, 6th Gen", "Memory: 8GB RAM", "Storage: 256GB SSD", "Extras: Backlit keyboard, webcam & fingerprint sensor" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 840 G8", img: "3.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i7, 11th Gen", "Memory: 32GB RAM", "Storage: 256GB SSD", "Extras: Backlit keyboard & fingerprint sensor" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 840 G5", img: "4.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i5, 8th Gen", "Memory: 8GB RAM", "Storage: 256GB SSD", "Extras: Backlit keyboard, webcam & fingerprint sensor" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 1040 G8", img: "5.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i7, 11th Gen", "Memory: 16GB RAM", "Storage: 256GB SSD", "Graphics: 8GB Intel Iris Xe (dedicated)", "Extras: Backlit keyboard, webcam & fingerprint sensor" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 840 G7", img: "6.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i5, 10th Gen", "Memory: 16GB RAM", "Storage: 256GB SSD" ] },
+
+  { cat: "Laptop", name: "Dell Latitude 5320", img: "7.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i7, 11th Gen", "Memory: 16GB RAM", "Storage: 256GB SSD" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 830 G6 x360", img: "8.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i5, 8th Gen", "Memory: 16GB RAM", "Storage: 256GB SSD", "Display: Touchscreen" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 1040 G8 x360", img: "9.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i7, 11th Gen", "Memory: 16GB RAM", "Storage: 512GB SSD", "Extras: Face ID, backlit keyboard & fingerprint sensor" ] },
+
+  { cat: "Laptop", name: "HP EliteBook 1040 G8", img: "images/Hero/Store.JPG.jpg", price: "Message for price", specs: [
+      "Processor: Intel Core i7, 11th Gen", "Memory: 16GB RAM", "Storage: 256GB SSD", "Graphics: Intel Iris Xe", "Extras: Backlit keyboard, webcam, touchscreen & fingerprint sensor" ] }
 ];
 
 /* ===================== below here: no need to edit ===================== */
